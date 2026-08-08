@@ -1,11 +1,19 @@
 import asyncio
 import itertools
 from collections.abc import Mapping
-from typing import TypeVar
+from dataclasses import dataclass
+from typing import Generic, TypeVar
 
 from .base import BaseAsyncResourceSemaphore, SemaphoreError, Ticket
 
 K = TypeVar("K", bound=str)
+
+
+@dataclass(slots=True, frozen=True)
+class _AsyncWaiter(Generic[K]):
+    seq: int
+    demands: dict[K, int]
+    event: asyncio.Event
 
 
 class _AsyncBaseSemaphore(BaseAsyncResourceSemaphore[K]):
@@ -22,22 +30,30 @@ class _AsyncBaseSemaphore(BaseAsyncResourceSemaphore[K]):
         self._available: dict[K, int] = dict(resources)
         self._active_tickets: dict[Ticket, dict[K, int]] = {}
         self._lock = asyncio.Lock()
-        self._condition = asyncio.Condition(self._lock)
+        self._waiters: list[_AsyncWaiter] = []
         self._is_shutdown = False
 
+    def _notify_first_eligible(self) -> None:
+        """Wake the first waiter whose demands can be satisfied."""
+        for waiter in self._waiters:
+            if self._can_acquire(waiter.demands):
+                waiter.event.set()
+                return
+
     async def release(self, ticket: Ticket) -> None:
-        async with self._condition:
+        async with self._lock:
             if ticket not in self._active_tickets:
                 raise ValueError("Invalid or already released ticket.")
             demands = self._active_tickets.pop(ticket)
             for name, units in demands.items():
                 self._available[name] += units
-            self._condition.notify_all()
+            self._notify_first_eligible()
 
     async def shutdown(self) -> None:
-        async with self._condition:
+        async with self._lock:
             self._is_shutdown = True
-            self._condition.notify_all()
+            for waiter in self._waiters:
+                waiter.event.set()
 
     @property
     def is_shutdown(self) -> bool:
@@ -87,20 +103,33 @@ class AsyncResourceSemaphore(_AsyncBaseSemaphore[K]):
         self._seq_counter = itertools.count()
         self._queue: list[int] = []
 
+    def _notify_first_eligible(self) -> None:
+        """Wake the first waiter within the lookahead window whose demands fit."""
+        for i, seq in enumerate(self._queue):
+            if i >= self.lookahead_window:
+                break
+            for waiter in self._waiters:
+                if waiter.seq == seq and self._can_acquire(waiter.demands):
+                    waiter.event.set()
+                    return
+
     async def acquire(
         self, demands: Mapping[K, int], timeout: float | None = None
     ) -> Ticket:
         self._validate_demands(demands)
         seq = next(self._seq_counter)
-        async with self._condition:
+        waiter = _AsyncWaiter(seq=seq, demands=dict(demands), event=asyncio.Event())
+
+        async with self._lock:
             self._queue.append(seq)
-            try:
-                deadline = (
-                    None
-                    if timeout is None
-                    else asyncio.get_running_loop().time() + timeout
-                )
-                while True:
+            self._waiters.append(waiter)
+
+        try:
+            deadline = (
+                None if timeout is None else asyncio.get_running_loop().time() + timeout
+            )
+            while True:
+                async with self._lock:
                     if self._is_shutdown:
                         raise SemaphoreError("Semaphore shut down; cannot acquire.")
 
@@ -113,33 +142,32 @@ class AsyncResourceSemaphore(_AsyncBaseSemaphore[K]):
                             is_eligible = False
 
                     if can_acquire and is_eligible:
-                        break
+                        for name, units in demands.items():
+                            self._available[name] -= units
+                        ticket = Ticket()
+                        self._active_tickets[ticket] = dict(demands)
+                        return ticket
 
-                    remaining = None
-                    if deadline is not None:
-                        remaining = deadline - asyncio.get_running_loop().time()
-                        if remaining <= 0:
-                            raise TimeoutError(
-                                f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
-                            )
-                    try:
-                        if remaining is None:
-                            await self._condition.wait()
-                        else:
-                            await asyncio.wait_for(
-                                self._condition.wait(), timeout=remaining
-                            )
-                    except TimeoutError:
-                        continue
-
-                for name, units in demands.items():
-                    self._available[name] -= units
-                ticket = Ticket()
-                self._active_tickets[ticket] = dict(demands)
-                return ticket
-            finally:
+                remaining = None
+                if deadline is not None:
+                    remaining = deadline - asyncio.get_running_loop().time()
+                    if remaining <= 0:
+                        raise TimeoutError(
+                            f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
+                        )
+                try:
+                    if remaining is None:
+                        await waiter.event.wait()
+                    else:
+                        await asyncio.wait_for(waiter.event.wait(), timeout=remaining)
+                except TimeoutError:
+                    pass
+                waiter.event.clear()
+        finally:
+            async with self._lock:
+                self._waiters.remove(waiter)
                 self._queue.remove(seq)
-                self._condition.notify_all()
+                self._notify_first_eligible()
 
 
 class AsyncGreedyResourceSemaphore(_AsyncBaseSemaphore[K]):
@@ -153,16 +181,26 @@ class AsyncGreedyResourceSemaphore(_AsyncBaseSemaphore[K]):
         self, demands: Mapping[K, int], timeout: float | None = None
     ) -> Ticket:
         self._validate_demands(demands)
-        async with self._condition:
+        waiter = _AsyncWaiter(seq=0, demands=dict(demands), event=asyncio.Event())
+
+        async with self._lock:
+            self._waiters.append(waiter)
+
+        try:
             deadline = (
                 None if timeout is None else asyncio.get_running_loop().time() + timeout
             )
             while True:
-                if self._is_shutdown:
-                    raise SemaphoreError("Semaphore shut down; cannot acquire.")
+                async with self._lock:
+                    if self._is_shutdown:
+                        raise SemaphoreError("Semaphore shut down; cannot acquire.")
 
-                if self._can_acquire(demands):
-                    break
+                    if self._can_acquire(demands):
+                        for name, units in demands.items():
+                            self._available[name] -= units
+                        ticket = Ticket()
+                        self._active_tickets[ticket] = dict(demands)
+                        return ticket
 
                 remaining = None
                 if deadline is not None:
@@ -173,19 +211,16 @@ class AsyncGreedyResourceSemaphore(_AsyncBaseSemaphore[K]):
                         )
                 try:
                     if remaining is None:
-                        await self._condition.wait()
+                        await waiter.event.wait()
                     else:
-                        await asyncio.wait_for(
-                            self._condition.wait(), timeout=remaining
-                        )
+                        await asyncio.wait_for(waiter.event.wait(), timeout=remaining)
                 except TimeoutError:
-                    continue
-
-            for name, units in demands.items():
-                self._available[name] -= units
-            ticket = Ticket()
-            self._active_tickets[ticket] = dict(demands)
-            return ticket
+                    pass
+                waiter.event.clear()
+        finally:
+            async with self._lock:
+                self._waiters.remove(waiter)
+                self._notify_first_eligible()
 
 
 class AsyncNoopResourceSemaphore(BaseAsyncResourceSemaphore[K]):

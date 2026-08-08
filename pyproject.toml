@@ -1,6 +1,6 @@
 [project]
 name = "resource-semaphore"
-version = "1.1.0"
+version = "1.2.0"
 description = "A typed, multi-resource semaphore for managing and applying backpressure to single-process application resources."
 readme = "README.md"
 authors = [{ name = "Abdulrahman Hedya", email = "abdohedya19@gmail.com" }]

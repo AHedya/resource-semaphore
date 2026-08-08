@@ -2,12 +2,14 @@
 
 ![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.14t-blue.svg)
-![Coverage](https://img.shields.io/badge/Coverage-86%25-yellowgreen.svg)
+![Coverage](https://img.shields.io/badge/Coverage-82%25-yellowgreen.svg)
 
 
 **Resource Semaphore** is a typed, high-level synchronization library for managing multiple constrained resources within a single process. It applies backpressure to prevent resource exhaustion.
 
 Standard semaphores guard a single counter of "slots." `resource-semaphore` extends this to **multiple, heterogeneous resources**: such as CPU cores, available RAM, disk I/O bandwidth, or worker slots: with a single, atomic acquire/release operation. When capacity is exhausted, callers block until resources become available.
+
+> **What's New in v1.2.0**: We overhauled the concurrency model to prevent "thundering herd" bottlenecks using a per-waiter event pattern! See the [Changelog](CHANGELOG.md) for details.
 
 ## Installation
 

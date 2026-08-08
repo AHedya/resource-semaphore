@@ -2,11 +2,19 @@ import itertools
 import threading
 import time
 from collections.abc import Mapping
-from typing import TypeVar
+from dataclasses import dataclass
+from typing import Generic, TypeVar
 
 from .base import BaseResourceSemaphore, SemaphoreError, Ticket
 
 K = TypeVar("K", bound=str)
+
+
+@dataclass
+class _SyncWaiter(Generic[K]):
+    seq: int
+    demands: dict[K, int]
+    event: threading.Event
 
 
 class _SyncBaseSemaphore(BaseResourceSemaphore[K]):
@@ -23,22 +31,30 @@ class _SyncBaseSemaphore(BaseResourceSemaphore[K]):
         self._available: dict[K, int] = dict(resources)
         self._active_tickets: dict[Ticket, dict[K, int]] = {}
         self._lock = threading.Lock()
-        self._condition = threading.Condition(self._lock)
+        self._waiters: list[_SyncWaiter] = []
         self._is_shutdown = False
 
+    def _notify_first_eligible(self) -> None:
+        """Wake the first waiter whose demands can be satisfied."""
+        for waiter in self._waiters:
+            if self._can_acquire(waiter.demands):
+                waiter.event.set()
+                return
+
     def release(self, ticket: Ticket):
-        with self._condition:
+        with self._lock:
             if ticket not in self._active_tickets:
                 raise ValueError("Invalid or already released ticket.")
             demands = self._active_tickets.pop(ticket)
             for name, units in demands.items():
                 self._available[name] += units
-            self._condition.notify_all()
+            self._notify_first_eligible()
 
     def shutdown(self) -> None:
-        with self._condition:
+        with self._lock:
             self._is_shutdown = True
-            self._condition.notify_all()
+            for waiter in self._waiters:
+                waiter.event.set()
 
     @property
     def is_shutdown(self) -> bool:
@@ -94,15 +110,30 @@ class ResourceSemaphore(_SyncBaseSemaphore[K]):
         self._seq_counter = itertools.count()
         self._queue: list[int] = []
 
+    def _notify_first_eligible(self) -> None:
+        """Wake the first waiter within the lookahead window whose demands fit."""
+        for i, seq in enumerate(self._queue):
+            if i >= self.lookahead_window:
+                break
+            for waiter in self._waiters:
+                if waiter.seq == seq and self._can_acquire(waiter.demands):
+                    waiter.event.set()
+                    return
+
     def acquire(self, demands: Mapping[K, int], timeout: float | None = None) -> Ticket:
         self._validate_demands(demands)
 
         seq = next(self._seq_counter)
-        with self._condition:
+        waiter = _SyncWaiter(seq=seq, demands=dict(demands), event=threading.Event())
+
+        with self._lock:
             self._queue.append(seq)
-            try:
-                deadline = None if timeout is None else time.monotonic() + timeout
-                while True:
+            self._waiters.append(waiter)
+
+        try:
+            deadline = None if timeout is None else time.monotonic() + timeout
+            while True:
+                with self._lock:
                     if self._is_shutdown:
                         raise SemaphoreError("Semaphore shut down; cannot acquire.")
 
@@ -115,25 +146,26 @@ class ResourceSemaphore(_SyncBaseSemaphore[K]):
                             is_eligible = False
 
                     if can_acquire and is_eligible:
-                        break
+                        for name, units in demands.items():
+                            self._available[name] -= units
+                        ticket = Ticket()
+                        self._active_tickets[ticket] = dict(demands)
+                        return ticket
 
-                    remaining = None
-                    if deadline is not None:
-                        remaining = deadline - time.monotonic()
-                        if remaining <= 0:
-                            raise TimeoutError(
-                                f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
-                            )
-                    self._condition.wait(timeout=remaining)
-
-                for name, units in demands.items():
-                    self._available[name] -= units
-                ticket = Ticket()
-                self._active_tickets[ticket] = dict(demands)
-                return ticket
-            finally:
+                remaining = None
+                if deadline is not None:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise TimeoutError(
+                            f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
+                        )
+                waiter.event.wait(timeout=remaining)
+                waiter.event.clear()
+        finally:
+            with self._lock:
+                self._waiters.remove(waiter)
                 self._queue.remove(seq)
-                self._condition.notify_all()
+                self._notify_first_eligible()
 
 
 class GreedyResourceSemaphore(_SyncBaseSemaphore[K]):
@@ -145,15 +177,24 @@ class GreedyResourceSemaphore(_SyncBaseSemaphore[K]):
 
     def acquire(self, demands: Mapping[K, int], timeout: float | None = None) -> Ticket:
         self._validate_demands(demands)
+        waiter = _SyncWaiter(seq=0, demands=dict(demands), event=threading.Event())
 
-        with self._condition:
+        with self._lock:
+            self._waiters.append(waiter)
+
+        try:
             deadline = None if timeout is None else time.monotonic() + timeout
             while True:
-                if self._is_shutdown:
-                    raise SemaphoreError("Semaphore shut down; cannot acquire.")
+                with self._lock:
+                    if self._is_shutdown:
+                        raise SemaphoreError("Semaphore shut down; cannot acquire.")
 
-                if self._can_acquire(demands):
-                    break
+                    if self._can_acquire(demands):
+                        for name, units in demands.items():
+                            self._available[name] -= units
+                        ticket = Ticket()
+                        self._active_tickets[ticket] = dict(demands)
+                        return ticket
 
                 remaining = None
                 if deadline is not None:
@@ -162,13 +203,12 @@ class GreedyResourceSemaphore(_SyncBaseSemaphore[K]):
                         raise TimeoutError(
                             f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
                         )
-                self._condition.wait(timeout=remaining)
-
-            for name, units in demands.items():
-                self._available[name] -= units
-            ticket = Ticket()
-            self._active_tickets[ticket] = dict(demands)
-            return ticket
+                waiter.event.wait(timeout=remaining)
+                waiter.event.clear()
+        finally:
+            with self._lock:
+                self._waiters.remove(waiter)
+                self._notify_first_eligible()
 
 
 class NoopResourceSemaphore(BaseResourceSemaphore[K]):

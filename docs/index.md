@@ -2,6 +2,8 @@
 
 Resource Semaphore is a typed, high-level synchronization library for managing multiple constrained resources within a single process. It applies backpressure to prevent resource exhaustion.
 
+> **What's New in v1.2.0**: The internal synchronization engine has been rewritten to use a per-waiter event registry instead of a global broadcast. This prevents "thundering herd" bottlenecks and scales much better under heavy concurrency! See the [Changelog](./CHANGELOG.md) for details.
+
 ## Installation
 
 ```bash
