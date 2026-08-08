@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: nox-precommit
+        name: Run Nox Precommit (Quality + Tests)
+        entry: nox -s precommit
+        language: system
+        pass_filenames: false
+        always_run: true
