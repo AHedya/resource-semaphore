@@ -6,30 +6,11 @@ on:
       - v*
 
 jobs:
-  check-ci:
-    name: Verify CI # deduplicate running the same tests twice.
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check for successful CI run
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const runs = await github.rest.actions.listWorkflowRunsForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head_sha: context.sha,
-              workflow_id: 'ci.yml',
-              status: 'success'
-            });
-            if (runs.data.total_count === 0) {
-              core.setFailed(
-                `No successful CI run found for commit ${context.sha}. ` +
-                `Ensure CI passes on main before tagging.`
-              );
-            }
+  tests:
+    uses: ./.github/workflows/_tests.yaml
 
   publish:
-    needs: check-ci
+    needs: tests
     name: Build
     runs-on: ubuntu-latest
     environment:
