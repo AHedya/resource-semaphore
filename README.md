@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.14t-blue.svg)
-![Coverage](https://img.shields.io/badge/Coverage-95%25-brightgreen.svg)
+![Coverage](https://img.shields.io/badge/Coverage-86%25-yellowgreen.svg)
 
 
 **Resource Semaphore** is a typed, high-level synchronization library for managing multiple constrained resources within a single process. It applies backpressure to prevent resource exhaustion.

@@ -1,1 +1,1 @@
-docs: Add skills
+tests: Add benchmark
