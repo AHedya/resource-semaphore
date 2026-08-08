@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.14t-blue.svg)
-![Coverage](https://img.shields.io/badge/Coverage-99%25-brightgreen.svg)
+![Coverage](https://img.shields.io/badge/Coverage-95%25-brightgreen.svg)
 
 
 **Resource Semaphore** is a typed, high-level synchronization library for managing multiple constrained resources within a single process. It applies backpressure to prevent resource exhaustion.
@@ -42,7 +42,9 @@ async def main():
 
 - **Multi-resource**: manage DB connection, RAM, workers, or any named resource in a single semaphore
 - **Sync + Async**: `ResourceSemaphore` for threads, `AsyncResourceSemaphore` for asyncio
-- **Fairness (Strict FIFO)**: avoids starvation by enforcing head-of-line blocking for larger requests
+- **Fairness & Lookahead**: Avoids starvation by enforcing strict head-of-line blocking, with a configurable `lookahead_window` (default: 1) that allows smaller queued requests to safely bypass heavy blocked tasks, drastically improving throughput.
+- **Greedy Variants**: `GreedyResourceSemaphore` and `AsyncGreedyResourceSemaphore` skip queueing entirely for maximum utilization in non-starving pipelines.
+- **High Performance**: Built on a shared template base class architecture, heavily optimizing acquisition loops by stripping unnecessary overhead from greedy implementations.
 - **Timeouts**: abort waits gracefully using `timeout` arguments
 - **Safe Releases**: opaque `Ticket` objects prevent corrupted state from incorrect releases
 - **Typed**: generic over resource key types via `Literal` for compile-time safety

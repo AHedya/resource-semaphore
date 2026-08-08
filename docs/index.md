@@ -20,7 +20,26 @@ A standard semaphore guards a single counter — for example, "at most 5 concurr
 
 For example, your application might be constrained by both "CPU cores" and "available RAM." This library lets you model limits on these resources and apply backpressure to consumers requesting them. When a consumer calls `acquire()` or enters a `claim()` block, it will block until **all** requested resources are simultaneously available.
 
-> **Note:** `acquire()` and `claim()` block until the requested resources become available, maintaining strict FIFO order to guarantee fairness. You can optionally provide a `timeout` (in seconds) to fail fast with a `TimeoutError`.
+> **Note:** By default, `acquire()` and `claim()` block until the requested resources become available, maintaining a strict FIFO queue to guarantee fairness. You can optionally provide a `timeout` (in seconds) to fail fast with a `TimeoutError`.
+
+## Fairness, Lookahead, and Greedy Semaphores
+
+By default, `ResourceSemaphore` and `AsyncResourceSemaphore` use a strict FIFO queue. While this prevents starvation, it can lead to **head-of-line blocking** where a heavy task blocks smaller tasks from utilizing leftover resources. 
+
+To solve this, the standard semaphores accept a `lookahead_window` parameter (defaults to `1` for strict FIFO). Setting this to a higher number (e.g., `lookahead_window=5`) allows the semaphore to scan the first 5 queued tasks and immediately fulfill smaller tasks that fit within the available leftover capacity, massively improving pipeline throughput while maintaining bounded fairness.
+
+```python
+from resource_semaphore import AsyncResourceSemaphore
+
+# Allows up to 5 queued tasks to bypass the head of the line if their demands fit
+semaphore = AsyncResourceSemaphore({"cpu": 10}, lookahead_window=5)
+```
+
+For workloads where starvation is unlikely, you can use the hyper-optimized Greedy variants:
+- `GreedyResourceSemaphore`
+- `AsyncGreedyResourceSemaphore`
+
+These skip queue bookkeeping entirely, allowing tasks to aggressively acquire resources the instant they become available, regardless of queue position.
 
 ## Sync vs Async
 

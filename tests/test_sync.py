@@ -5,7 +5,11 @@ from typing import Literal
 import pytest
 
 from resource_semaphore.base import SemaphoreError, Ticket
-from resource_semaphore.synchronous import NoopResourceSemaphore, ResourceSemaphore
+from resource_semaphore.synchronous import (
+    GreedyResourceSemaphore,
+    NoopResourceSemaphore,
+    ResourceSemaphore,
+)
 
 
 class TestResourceManagerInit:
@@ -368,3 +372,46 @@ def test_noop_semaphore():
 
     rs.shutdown()
     assert rs.is_shutdown is False  # type: ignore
+
+
+@pytest.mark.parametrize(
+    "semaphore_factory",
+    [
+        lambda: ResourceSemaphore({"cpu": 5}, lookahead_window=2),
+        lambda: GreedyResourceSemaphore({"cpu": 5}),
+    ],
+)
+def test_semaphore_bypass(semaphore_factory):
+    rs = semaphore_factory()
+    main_ticket = rs.acquire({"cpu": 3})
+    history = []
+
+    def task_a():
+        # Needs 3 CPU. Will block because only 2 are available.
+        ticket = rs.acquire({"cpu": 3})
+        history.append("A_acquired")
+        rs.release(ticket)
+        history.append("A_released")
+
+    def task_b():
+        # Needs 2 CPU. 2 are available. It will bypass A
+        ticket = rs.acquire({"cpu": 2})
+        history.append("B_acquired")
+        rs.release(ticket)
+        history.append("B_released")
+
+    ta = threading.Thread(target=task_a)
+    ta.start()
+    time.sleep(0.05)
+    tb = threading.Thread(target=task_b)
+    tb.start()
+    time.sleep(0.05)
+
+    # B should have bypassed A
+    assert history == ["B_acquired", "B_released"]
+
+    rs.release(main_ticket)
+    ta.join(timeout=2)
+    tb.join(timeout=2)
+
+    assert history == ["B_acquired", "B_released", "A_acquired", "A_released"]

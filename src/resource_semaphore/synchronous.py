@@ -9,14 +9,10 @@ from .base import BaseResourceSemaphore, SemaphoreError, Ticket
 K = TypeVar("K", bound=str)
 
 
-class ResourceSemaphore(BaseResourceSemaphore[K]):
-    """
-    Multi-resource counting semaphore.
-    """
-
+class _SyncBaseSemaphore(BaseResourceSemaphore[K]):
     def __init__(self, resources: Mapping[K, int]):
         if not resources:
-            raise ValueError("ResourceSemaphore requires at least one resource.")
+            raise ValueError("Semaphore requires at least one resource.")
         for name, cap in resources.items():
             self._check_int(name, cap, "capacity")
             if cap <= 0:
@@ -29,42 +25,6 @@ class ResourceSemaphore(BaseResourceSemaphore[K]):
         self._lock = threading.Lock()
         self._condition = threading.Condition(self._lock)
         self._is_shutdown = False
-
-        # FIFO fairness
-        self._seq_counter = itertools.count()
-        self._queue: list[int] = []
-
-    def acquire(self, demands: Mapping[K, int], timeout: float | None = None) -> Ticket:
-        self._validate_demands(demands)
-
-        seq = next(self._seq_counter)
-        with self._condition:
-            self._queue.append(seq)
-            try:
-                deadline = None if timeout is None else time.monotonic() + timeout
-                while not (self._queue[0] == seq and self._can_acquire(demands)):
-                    if self._is_shutdown:
-                        raise SemaphoreError("Semaphore shut down; cannot acquire.")
-                    remaining = None
-                    if deadline is not None:
-                        remaining = deadline - time.monotonic()
-                        if remaining <= 0:
-                            raise TimeoutError(
-                                f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
-                            )
-                    if not self._condition.wait(timeout=remaining):
-                        continue
-                if self._is_shutdown:
-                    raise SemaphoreError("Semaphore shut down; cannot acquire.")
-
-                for name, units in demands.items():
-                    self._available[name] -= units
-                ticket = Ticket()
-                self._active_tickets[ticket] = dict(demands)
-                return ticket
-            finally:
-                self._queue.remove(seq)
-                self._condition.notify_all()
 
     def release(self, ticket: Ticket):
         with self._condition:
@@ -119,6 +79,96 @@ class ResourceSemaphore(BaseResourceSemaphore[K]):
             raise TypeError(
                 f"Resource '{name}' {label} must be an integer, got {type(value).__name__}."
             )
+
+
+class ResourceSemaphore(_SyncBaseSemaphore[K]):
+    """
+    Multi-resource counting semaphore with queue fairness.
+    """
+
+    def __init__(self, resources: Mapping[K, int], lookahead_window: int = 1):
+        super().__init__(resources)
+        self.lookahead_window = lookahead_window
+
+        # FIFO fairness
+        self._seq_counter = itertools.count()
+        self._queue: list[int] = []
+
+    def acquire(self, demands: Mapping[K, int], timeout: float | None = None) -> Ticket:
+        self._validate_demands(demands)
+
+        seq = next(self._seq_counter)
+        with self._condition:
+            self._queue.append(seq)
+            try:
+                deadline = None if timeout is None else time.monotonic() + timeout
+                while True:
+                    if self._is_shutdown:
+                        raise SemaphoreError("Semaphore shut down; cannot acquire.")
+
+                    can_acquire = self._can_acquire(demands)
+                    is_eligible = True
+                    if self.lookahead_window is not None:
+                        try:
+                            is_eligible = self._queue.index(seq) < self.lookahead_window
+                        except ValueError:
+                            is_eligible = False
+
+                    if can_acquire and is_eligible:
+                        break
+
+                    remaining = None
+                    if deadline is not None:
+                        remaining = deadline - time.monotonic()
+                        if remaining <= 0:
+                            raise TimeoutError(
+                                f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
+                            )
+                    self._condition.wait(timeout=remaining)
+
+                for name, units in demands.items():
+                    self._available[name] -= units
+                ticket = Ticket()
+                self._active_tickets[ticket] = dict(demands)
+                return ticket
+            finally:
+                self._queue.remove(seq)
+                self._condition.notify_all()
+
+
+class GreedyResourceSemaphore(_SyncBaseSemaphore[K]):
+    """
+    Resource semaphore that does not enforce any fairness or FIFO ordering.
+    Requests will acquire resources as soon as they are available, potentially
+    bypassing earlier blocked requests.
+    """
+
+    def acquire(self, demands: Mapping[K, int], timeout: float | None = None) -> Ticket:
+        self._validate_demands(demands)
+
+        with self._condition:
+            deadline = None if timeout is None else time.monotonic() + timeout
+            while True:
+                if self._is_shutdown:
+                    raise SemaphoreError("Semaphore shut down; cannot acquire.")
+
+                if self._can_acquire(demands):
+                    break
+
+                remaining = None
+                if deadline is not None:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise TimeoutError(
+                            f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
+                        )
+                self._condition.wait(timeout=remaining)
+
+            for name, units in demands.items():
+                self._available[name] -= units
+            ticket = Ticket()
+            self._active_tickets[ticket] = dict(demands)
+            return ticket
 
 
 class NoopResourceSemaphore(BaseResourceSemaphore[K]):

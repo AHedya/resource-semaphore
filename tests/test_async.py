@@ -4,6 +4,7 @@ from typing import Literal
 import pytest
 
 from resource_semaphore.asynchronous import (
+    AsyncGreedyResourceSemaphore,
     AsyncNoopResourceSemaphore,
     AsyncResourceSemaphore,
 )
@@ -347,3 +348,42 @@ async def test_async_noop_semaphore():
     await rs.shutdown()
 
     assert rs.is_shutdown is False  # type: ignore
+
+
+@pytest.mark.parametrize(
+    "semaphore_factory",
+    [
+        lambda: AsyncResourceSemaphore({"cpu": 5}, lookahead_window=2),
+        lambda: AsyncGreedyResourceSemaphore({"cpu": 5}),
+    ],
+)
+async def test_semaphore_bypass(semaphore_factory):
+    rs = semaphore_factory()
+    main_ticket = await rs.acquire({"cpu": 3})
+    history = []
+
+    async def task_a():
+        ticket = await rs.acquire({"cpu": 3})
+        history.append("A_acquired")
+        await rs.release(ticket)
+        history.append("A_released")
+
+    async def task_b():
+        ticket = await rs.acquire({"cpu": 2})
+        history.append("B_acquired")
+        await rs.release(ticket)
+        history.append("B_released")
+
+    ta = asyncio.create_task(task_a())
+    await asyncio.sleep(0.05)
+    tb = asyncio.create_task(task_b())
+    await asyncio.sleep(0.05)
+
+    # B should have bypassed A
+    assert history == ["B_acquired", "B_released"]
+
+    await rs.release(main_ticket)
+    await asyncio.wait_for(ta, timeout=2.0)
+    await asyncio.wait_for(tb, timeout=2.0)
+
+    assert history == ["B_acquired", "B_released", "A_acquired", "A_released"]

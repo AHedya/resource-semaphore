@@ -8,10 +8,10 @@ from .base import BaseAsyncResourceSemaphore, SemaphoreError, Ticket
 K = TypeVar("K", bound=str)
 
 
-class AsyncResourceSemaphore(BaseAsyncResourceSemaphore[K]):
+class _AsyncBaseSemaphore(BaseAsyncResourceSemaphore[K]):
     def __init__(self, resources: Mapping[K, int]):
         if not resources:
-            raise ValueError("AsyncResourceSemaphore requires at least one resource.")
+            raise ValueError("Semaphore requires at least one resource.")
         for name, cap in resources.items():
             self._check_int(name, cap, "capacity")
             if cap <= 0:
@@ -24,54 +24,6 @@ class AsyncResourceSemaphore(BaseAsyncResourceSemaphore[K]):
         self._lock = asyncio.Lock()
         self._condition = asyncio.Condition(self._lock)
         self._is_shutdown = False
-
-        # FIFO fairness
-        self._seq_counter = itertools.count()
-        self._queue: list[int] = []
-
-    async def acquire(
-        self, demands: Mapping[K, int], timeout: float | None = None
-    ) -> Ticket:
-        self._validate_demands(demands)
-        seq = next(self._seq_counter)
-        async with self._condition:
-            self._queue.append(seq)
-            try:
-                deadline = (
-                    None
-                    if timeout is None
-                    else asyncio.get_running_loop().time() + timeout
-                )
-                while not (self._queue[0] == seq and self._can_acquire(demands)):
-                    if self._is_shutdown:
-                        raise SemaphoreError("Semaphore shut down; cannot acquire.")
-                    remaining = None
-                    if deadline is not None:
-                        remaining = deadline - asyncio.get_running_loop().time()
-                        if remaining <= 0:
-                            raise TimeoutError(
-                                f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
-                            )
-                    try:
-                        if remaining is None:
-                            await self._condition.wait()
-                        else:
-                            await asyncio.wait_for(
-                                self._condition.wait(), timeout=remaining
-                            )
-                    except TimeoutError:
-                        continue
-                if self._is_shutdown:
-                    raise SemaphoreError("Semaphore shut down; cannot acquire.")
-
-                for name, units in demands.items():
-                    self._available[name] -= units
-                ticket = Ticket()
-                self._active_tickets[ticket] = dict(demands)
-                return ticket
-            finally:
-                self._queue.remove(seq)
-                self._condition.notify_all()
 
     async def release(self, ticket: Ticket) -> None:
         async with self._condition:
@@ -97,7 +49,6 @@ class AsyncResourceSemaphore(BaseAsyncResourceSemaphore[K]):
 
     @property
     def available(self) -> dict[K, int]:
-        # Note: not locked — for diagnostics/logging only
         return dict(self._available)
 
     def _validate_demands(self, demands: Mapping[K, int]) -> None:
@@ -125,6 +76,116 @@ class AsyncResourceSemaphore(BaseAsyncResourceSemaphore[K]):
             raise TypeError(
                 f"Resource '{name}' {label} must be an integer, got {type(value).__name__}."
             )
+
+
+class AsyncResourceSemaphore(_AsyncBaseSemaphore[K]):
+    def __init__(self, resources: Mapping[K, int], lookahead_window: int = 1):
+        super().__init__(resources)
+        self.lookahead_window = lookahead_window
+
+        # FIFO fairness
+        self._seq_counter = itertools.count()
+        self._queue: list[int] = []
+
+    async def acquire(
+        self, demands: Mapping[K, int], timeout: float | None = None
+    ) -> Ticket:
+        self._validate_demands(demands)
+        seq = next(self._seq_counter)
+        async with self._condition:
+            self._queue.append(seq)
+            try:
+                deadline = (
+                    None
+                    if timeout is None
+                    else asyncio.get_running_loop().time() + timeout
+                )
+                while True:
+                    if self._is_shutdown:
+                        raise SemaphoreError("Semaphore shut down; cannot acquire.")
+
+                    can_acquire = self._can_acquire(demands)
+                    is_eligible = True
+                    if self.lookahead_window is not None:
+                        try:
+                            is_eligible = self._queue.index(seq) < self.lookahead_window
+                        except ValueError:
+                            is_eligible = False
+
+                    if can_acquire and is_eligible:
+                        break
+
+                    remaining = None
+                    if deadline is not None:
+                        remaining = deadline - asyncio.get_running_loop().time()
+                        if remaining <= 0:
+                            raise TimeoutError(
+                                f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
+                            )
+                    try:
+                        if remaining is None:
+                            await self._condition.wait()
+                        else:
+                            await asyncio.wait_for(
+                                self._condition.wait(), timeout=remaining
+                            )
+                    except TimeoutError:
+                        continue
+
+                for name, units in demands.items():
+                    self._available[name] -= units
+                ticket = Ticket()
+                self._active_tickets[ticket] = dict(demands)
+                return ticket
+            finally:
+                self._queue.remove(seq)
+                self._condition.notify_all()
+
+
+class AsyncGreedyResourceSemaphore(_AsyncBaseSemaphore[K]):
+    """
+    Async resource semaphore that does not enforce any fairness or FIFO ordering.
+    Requests will acquire resources as soon as they are available, potentially
+    bypassing earlier blocked requests.
+    """
+
+    async def acquire(
+        self, demands: Mapping[K, int], timeout: float | None = None
+    ) -> Ticket:
+        self._validate_demands(demands)
+        async with self._condition:
+            deadline = (
+                None if timeout is None else asyncio.get_running_loop().time() + timeout
+            )
+            while True:
+                if self._is_shutdown:
+                    raise SemaphoreError("Semaphore shut down; cannot acquire.")
+
+                if self._can_acquire(demands):
+                    break
+
+                remaining = None
+                if deadline is not None:
+                    remaining = deadline - asyncio.get_running_loop().time()
+                    if remaining <= 0:
+                        raise TimeoutError(
+                            f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
+                        )
+                try:
+                    if remaining is None:
+                        await self._condition.wait()
+                    else:
+                        await asyncio.wait_for(
+                            self._condition.wait(), timeout=remaining
+                        )
+                except TimeoutError:
+                    continue
+
+            for name, units in demands.items():
+                self._available[name] -= units
+            ticket = Ticket()
+            self._active_tickets[ticket] = dict(demands)
+            return ticket
 
 
 class AsyncNoopResourceSemaphore(BaseAsyncResourceSemaphore[K]):

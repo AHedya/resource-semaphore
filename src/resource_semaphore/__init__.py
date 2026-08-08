@@ -5,13 +5,23 @@ try:
 except importlib.metadata.PackageNotFoundError:
     __version__ = "1.0.0"
 
-from .asynchronous import AsyncNoopResourceSemaphore, AsyncResourceSemaphore
-from .synchronous import NoopResourceSemaphore, ResourceSemaphore
+from .asynchronous import (
+    AsyncGreedyResourceSemaphore,
+    AsyncNoopResourceSemaphore,
+    AsyncResourceSemaphore,
+)
+from .synchronous import (
+    GreedyResourceSemaphore,
+    NoopResourceSemaphore,
+    ResourceSemaphore,
+)
 
 __all__ = [
     "ResourceSemaphore",
+    "GreedyResourceSemaphore",
     "NoopResourceSemaphore",
     "AsyncNoopResourceSemaphore",
     "AsyncResourceSemaphore",
+    "AsyncGreedyResourceSemaphore",
     "__version__",
 ]
