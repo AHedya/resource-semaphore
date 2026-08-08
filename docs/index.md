@@ -2,7 +2,7 @@
 
 Resource Semaphore is a typed, high-level synchronization library for managing multiple constrained resources within a single process. It applies backpressure to prevent resource exhaustion.
 
-> **What's New in v1.2.0**: The internal synchronization engine has been rewritten to use a per-waiter event registry instead of a global broadcast. This prevents "thundering herd" bottlenecks and scales much better under heavy concurrency! See the [Changelog](./CHANGELOG.md) for details.
+> **What's New in v1.3.0**: We introduced **Infinite Bypass Fairness** to automatically prevent pipeline deadlocks without configuration, and added a blistering fast **NumPy Vectorization Backend** for high-contention throughput! See the [Changelog](./CHANGELOG.md) for details.
 
 ## Installation
 
@@ -24,17 +24,16 @@ For example, your application might be constrained by both "CPU cores" and "avai
 
 > **Note:** By default, `acquire()` and `claim()` block until the requested resources become available, maintaining a strict FIFO queue to guarantee fairness. You can optionally provide a `timeout` (in seconds) to fail fast with a `TimeoutError`.
 
-## Fairness, Lookahead, and Greedy Semaphores
+## Fairness, Infinite Bypass, and Greedy Semaphores
 
-By default, `ResourceSemaphore` and `AsyncResourceSemaphore` use a strict FIFO queue. While this prevents starvation, it can lead to **head-of-line blocking** where a heavy task blocks smaller tasks from utilizing leftover resources. 
-
-To solve this, the standard semaphores accept a `lookahead_window` parameter (defaults to `1` for strict FIFO). Setting this to a higher number (e.g., `lookahead_window=5`) allows the semaphore to scan the first 5 queued tasks and immediately fulfill smaller tasks that fit within the available leftover capacity, massively improving pipeline throughput while maintaining bounded fairness.
+By default, `ResourceSemaphore` and `AsyncResourceSemaphore` use an intelligent **Infinite Bypass** fairness model. While they prioritize older requests to prevent starvation, they automatically evaluate the *entire* queue and allow any smaller tasks to safely bypass blocked heavy tasks if leftover capacity permits. This massive improvement over strict head-of-line blocking prevents pipelines from deadlocking without requiring any manual window configuration.
 
 ```python
 from resource_semaphore import AsyncResourceSemaphore
 
-# Allows up to 5 queued tasks to bypass the head of the line if their demands fit
-semaphore = AsyncResourceSemaphore({"cpu": 10}, lookahead_window=5)
+# Even if a massive task is blocked waiting for 10 CPU cores,
+# a smaller task needing only 1 CPU core can immediately bypass it if available.
+semaphore = AsyncResourceSemaphore({"cpu": 10})
 ```
 
 For workloads where starvation is unlikely, you can use the hyper-optimized Greedy variants:
@@ -46,8 +45,8 @@ These skip queue bookkeeping entirely, allowing tasks to aggressively acquire re
 ## Sync vs Async
 
 The package provides two primary classes:
-- `ResourceSemaphore`: For synchronous multi-threaded applications. Uses `threading.Lock` and `threading.Condition` internally.
-- `AsyncResourceSemaphore`: For asynchronous `asyncio` applications. Uses `asyncio.Lock` and `asyncio.Condition` internally.
+- `ResourceSemaphore`: For synchronous multi-threaded applications. Uses a per-waiter `threading.Event` registry internally.
+- `AsyncResourceSemaphore`: For asynchronous `asyncio` applications. Uses a per-waiter `asyncio.Event` registry internally.
 
 Both share identical APIs (modulo `async`/`await`).
 
@@ -221,3 +220,20 @@ semaphore = ResourceSemaphore(
 ```
 
 Async variants (`aget_cpu`, `aget_memory`, `aget_storage`) are also available if you are discovering resources during application startup in an async context.
+
+## NumPy Vectorized Semaphores
+
+For applications operating under massive concurrency where evaluating the wait-queue via Python loops becomes a CPU bottleneck, we offer a dedicated **NumPy Vectorization Backend**.
+
+```bash
+pip install "resource-semaphore[numpy]"
+```
+
+The `resource_semaphore.np` subpackage provides `NumpyResourceSemaphore` and `AsyncNumpyResourceSemaphore`. These classes maintain the exact same API and fairness guarantees as their standard counterparts, but they stack waiters' demands into a matrix (`np.vstack`) and resolve the queue using C-space boolean evaluations (`np.all`), granting $O(1)$ Python-time queue resolutions.
+
+```python
+from resource_semaphore.np import AsyncNumpyResourceSemaphore
+
+# Drop-in replacement for AsyncResourceSemaphore
+semaphore = AsyncNumpyResourceSemaphore({"db_conn": 2})
+```

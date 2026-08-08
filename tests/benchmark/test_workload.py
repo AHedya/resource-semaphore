@@ -11,6 +11,7 @@ from resource_semaphore.asynchronous import (
     AsyncResourceSemaphore,
 )
 from resource_semaphore.base import BaseAsyncResourceSemaphore, BaseResourceSemaphore
+from resource_semaphore.np import AsyncNumpyResourceSemaphore, NumpyResourceSemaphore
 from resource_semaphore.synchronous import (
     GreedyResourceSemaphore,
     ResourceSemaphore,
@@ -35,9 +36,10 @@ ROUNDS = 3
     "semaphore_factory",
     [
         lambda: GreedyResourceSemaphore(resources=RESOURCES),
-        lambda: ResourceSemaphore(resources=RESOURCES, lookahead_window=16),
+        lambda: ResourceSemaphore(resources=RESOURCES),
+        lambda: NumpyResourceSemaphore(resources=RESOURCES),
     ],
-    ids=["Greedy", "Fair"],
+    ids=["Greedy", "Fair", "Numpy"],
 )
 def test_sync_workload(
     benchmark: BenchmarkFixture,
@@ -63,9 +65,10 @@ def test_sync_workload(
     "semaphore_factory",
     [
         lambda: AsyncGreedyResourceSemaphore(resources=RESOURCES),
-        lambda: AsyncResourceSemaphore(resources=RESOURCES, lookahead_window=16),
+        lambda: AsyncResourceSemaphore(resources=RESOURCES),
+        lambda: AsyncNumpyResourceSemaphore(resources=RESOURCES),
     ],
-    ids=["Greedy", "Fair"],
+    ids=["Greedy", "Fair", "Numpy"],
 )
 def test_async_workload(
     benchmark: BenchmarkFixture,

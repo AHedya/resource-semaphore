@@ -34,11 +34,27 @@ class _AsyncBaseSemaphore(BaseAsyncResourceSemaphore[K]):
         self._is_shutdown = False
 
     def _notify_first_eligible(self) -> None:
-        """Wake the first waiter whose demands can be satisfied."""
+        """Wake the first (earliest-arrived) waiter whose demands fit.
+
+        Only ever wakes ONE waiter -- never notify_all(). Waking a single
+        specific candidate avoids the thundering herd where every blocked
+        thread wakes up, fights over the lock, and finds it still can't
+        proceed. If a release frees enough for more than one waiter, the
+        winner's own successful acquire() re-runs this in its `finally`,
+        so the next eligible waiter gets woken in turn.
+        """
         for waiter in self._waiters:
             if self._can_acquire(waiter.demands):
                 waiter.event.set()
                 return
+
+    def _claim_locked(self, demands: Mapping[K, int]) -> Ticket:
+        """Deduct `demands` and mint a ticket. Caller must hold self._lock."""
+        for name, units in demands.items():
+            self._available[name] -= units
+        ticket = Ticket()
+        self._active_tickets[ticket] = dict(demands)
+        return ticket
 
     async def release(self, ticket: Ticket) -> None:
         async with self._lock:
@@ -95,33 +111,53 @@ class _AsyncBaseSemaphore(BaseAsyncResourceSemaphore[K]):
 
 
 class AsyncResourceSemaphore(_AsyncBaseSemaphore[K]):
-    def __init__(self, resources: Mapping[K, int], lookahead_window: int = 1):
+    """
+    Multi-resource counting semaphore with queue fairness.
+
+    A waiter is granted as soon as its demand fits AND no earlier-arrived
+    waiter could *also* currently be satisfied. This is deliberately not
+    strict head-of-line blocking: a later, smaller request can jump an
+    earlier, larger one that doesn't fit yet, so one big request can't
+    stall everyone behind it. Among requests that are simultaneously
+    satisfiable, the earliest arrival always wins.
+    """
+
+    def __init__(self, resources: Mapping[K, int]):
         super().__init__(resources)
-        self.lookahead_window = lookahead_window
-
-        # FIFO fairness
         self._seq_counter = itertools.count()
-        self._queue: list[int] = []
 
-    def _notify_first_eligible(self) -> None:
-        """Wake the first waiter within the lookahead window whose demands fit."""
-        for i, seq in enumerate(self._queue):
-            if i >= self.lookahead_window:
-                break
-            for waiter in self._waiters:
-                if waiter.seq == seq and self._can_acquire(waiter.demands):
-                    waiter.event.set()
-                    return
+    def _is_first_eligible(self, my_seq: int) -> bool:
+        """True iff no earlier-arrived waiter could currently acquire.
+
+        `self._waiters` is already in arrival order (append-only at the
+        tail; removals preserve the relative order of what's left), so
+        this is a single O(n) pass -- no separate seq queue needed, and
+        no need to search `self._waiters` for the waiter matching each
+        seq the way the previous implementation did.
+        """
+        for waiter in self._waiters:
+            if waiter.seq == my_seq:
+                return True
+            if self._can_acquire(waiter.demands):
+                return False
+        return True
 
     async def acquire(
         self, demands: Mapping[K, int], timeout: float | None = None
     ) -> Ticket:
         self._validate_demands(demands)
+
+        # Fast path: nobody's ahead of us
+        async with self._lock:
+            if self._is_shutdown:
+                raise SemaphoreError("Semaphore shut down; cannot acquire.")
+            if not self._waiters and self._can_acquire(demands):
+                return self._claim_locked(demands)
+
         seq = next(self._seq_counter)
         waiter = _AsyncWaiter(seq=seq, demands=dict(demands), event=asyncio.Event())
 
         async with self._lock:
-            self._queue.append(seq)
             self._waiters.append(waiter)
 
         try:
@@ -133,20 +169,8 @@ class AsyncResourceSemaphore(_AsyncBaseSemaphore[K]):
                     if self._is_shutdown:
                         raise SemaphoreError("Semaphore shut down; cannot acquire.")
 
-                    can_acquire = self._can_acquire(demands)
-                    is_eligible = True
-                    if self.lookahead_window is not None:
-                        try:
-                            is_eligible = self._queue.index(seq) < self.lookahead_window
-                        except ValueError:
-                            is_eligible = False
-
-                    if can_acquire and is_eligible:
-                        for name, units in demands.items():
-                            self._available[name] -= units
-                        ticket = Ticket()
-                        self._active_tickets[ticket] = dict(demands)
-                        return ticket
+                    if self._can_acquire(demands) and self._is_first_eligible(seq):
+                        return self._claim_locked(demands)
 
                 remaining = None
                 if deadline is not None:
@@ -166,7 +190,6 @@ class AsyncResourceSemaphore(_AsyncBaseSemaphore[K]):
         finally:
             async with self._lock:
                 self._waiters.remove(waiter)
-                self._queue.remove(seq)
                 self._notify_first_eligible()
 
 
@@ -181,6 +204,14 @@ class AsyncGreedyResourceSemaphore(_AsyncBaseSemaphore[K]):
         self, demands: Mapping[K, int], timeout: float | None = None
     ) -> Ticket:
         self._validate_demands(demands)
+
+        # Fast path
+        async with self._lock:
+            if self._is_shutdown:
+                raise SemaphoreError("Semaphore shut down; cannot acquire.")
+            if self._can_acquire(demands):
+                return self._claim_locked(demands)
+
         waiter = _AsyncWaiter(seq=0, demands=dict(demands), event=asyncio.Event())
 
         async with self._lock:
@@ -196,11 +227,7 @@ class AsyncGreedyResourceSemaphore(_AsyncBaseSemaphore[K]):
                         raise SemaphoreError("Semaphore shut down; cannot acquire.")
 
                     if self._can_acquire(demands):
-                        for name, units in demands.items():
-                            self._available[name] -= units
-                        ticket = Ticket()
-                        self._active_tickets[ticket] = dict(demands)
-                        return ticket
+                        return self._claim_locked(demands)
 
                 remaining = None
                 if deadline is not None:

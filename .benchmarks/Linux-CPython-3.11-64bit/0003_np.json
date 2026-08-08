@@ -1,0 +1,3444 @@
+{
+    "machine_info": {
+        "node": "Hedya-Desktop",
+        "processor": "x86_64",
+        "machine": "x86_64",
+        "python_compiler": "Clang 20.1.4 ",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.11.14",
+        "python_version": "3.11.14",
+        "python_build": [
+            "main",
+            "Oct 14 2025 21:26:53"
+        ],
+        "release": "6.6.87.2-microsoft-standard-WSL2",
+        "system": "Linux",
+        "cpu": {
+            "python_version": "3.11.14.final.0 (64 bit)",
+            "cpuinfo_version": [
+                9,
+                0,
+                0
+            ],
+            "cpuinfo_version_string": "9.0.0",
+            "arch": "X86_64",
+            "bits": 64,
+            "count": 12,
+            "arch_string_raw": "x86_64",
+            "vendor_id_raw": "AuthenticAMD",
+            "brand_raw": "AMD Ryzen 5 9600X 6-Core Processor",
+            "hz_advertised_friendly": "3.8926 GHz",
+            "hz_actual_friendly": "3.8926 GHz",
+            "hz_advertised": [
+                3892600000,
+                0
+            ],
+            "hz_actual": [
+                3892600000,
+                0
+            ],
+            "model": 68,
+            "family": 26,
+            "flags": [
+                "3dnowprefetch",
+                "abm",
+                "adx",
+                "aes",
+                "apic",
+                "arat",
+                "avx",
+                "avx2",
+                "avx512_bf16",
+                "avx512_bitalg",
+                "avx512_vbmi2",
+                "avx512_vnni",
+                "avx512_vp2intersect",
+                "avx512_vpopcntdq",
+                "avx512bitalg",
+                "avx512bw",
+                "avx512cd",
+                "avx512dq",
+                "avx512f",
+                "avx512ifma",
+                "avx512vbmi",
+                "avx512vbmi2",
+                "avx512vl",
+                "avx512vnni",
+                "avx512vpopcntdq",
+                "avx_vnni",
+                "bmi1",
+                "bmi2",
+                "clflush",
+                "clflushopt",
+                "clwb",
+                "clzero",
+                "cmov",
+                "cmp_legacy",
+                "constant_tsc",
+                "cpuid",
+                "cr8_legacy",
+                "cx16",
+                "cx8",
+                "de",
+                "decodeassists",
+                "erms",
+                "extd_apicid",
+                "f16c",
+                "flushbyasid",
+                "fma",
+                "fpu",
+                "fsgsbase",
+                "fsrm",
+                "fxsr",
+                "fxsr_opt",
+                "gfni",
+                "ht",
+                "hypervisor",
+                "ibpb",
+                "ibrs",
+                "invpcid",
+                "lahf_lm",
+                "lm",
+                "mca",
+                "mce",
+                "misalignsse",
+                "mmx",
+                "mmxext",
+                "movbe",
+                "msr",
+                "mtrr",
+                "nonstop_tsc",
+                "nopl",
+                "npt",
+                "nrip_save",
+                "nx",
+                "osvw",
+                "osxsave",
+                "pae",
+                "pat",
+                "pausefilter",
+                "pclmulqdq",
+                "pdpe1gb",
+                "perfctr_core",
+                "pfthreshold",
+                "pge",
+                "pni",
+                "popcnt",
+                "pse",
+                "pse36",
+                "rdpid",
+                "rdrand",
+                "rdrnd",
+                "rdseed",
+                "rdtscp",
+                "rep_good",
+                "sep",
+                "sha",
+                "sha_ni",
+                "smap",
+                "smep",
+                "ssbd",
+                "sse",
+                "sse2",
+                "sse4_1",
+                "sse4_2",
+                "sse4a",
+                "ssse3",
+                "stibp",
+                "svm",
+                "syscall",
+                "topoext",
+                "tsc",
+                "tsc_known_freq",
+                "tsc_reliable",
+                "tsc_scale",
+                "umip",
+                "v_vmsave_vmload",
+                "vaes",
+                "vmcb_clean",
+                "vme",
+                "vmmcall",
+                "vpclmulqdq",
+                "xgetbv1",
+                "xsave",
+                "xsavec",
+                "xsaveerptr",
+                "xsaveopt",
+                "xsaves"
+            ],
+            "l3_cache_size": 1048576,
+            "l2_cache_size": 6291456,
+            "l1_data_cache_size": 294912,
+            "l1_instruction_cache_size": 196608,
+            "l2_cache_line_size": 1024,
+            "l2_cache_associativity": 8
+        }
+    },
+    "commit_info": {
+        "id": "6ddb3b9083c13aca7f1c55fa2a7c28b10809f502",
+        "time": "2026-08-09T00:34:36+03:00",
+        "author_time": "2026-08-09T00:34:36+03:00",
+        "dirty": true,
+        "project": "resource-semaphore",
+        "branch": "main"
+    },
+    "benchmarks": [
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-1K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-1K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 1000,
+                "max_workers": 16
+            },
+            "param": "Greedy-1K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.10302586199759389,
+                "max": 0.12000863900175318,
+                "mean": 0.11216972100010025,
+                "stddev": 0.006181949546671164,
+                "rounds": 5,
+                "median": 0.11170199200205388,
+                "iqr": 0.006847504249890335,
+                "q1": 0.10924760249963583,
+                "q3": 0.11609510674952617,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.10302586199759389,
+                "hd15iqr": 0.12000863900175318,
+                "ops": 8.915061846316853,
+                "total": 0.5608486050005013,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-1K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-1K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 1000,
+                "max_workers": 64
+            },
+            "param": "Greedy-1K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.12717578999945545,
+                "max": 0.14649504000044544,
+                "mean": 0.1363938305999909,
+                "stddev": 0.008565225235224799,
+                "rounds": 5,
+                "median": 0.13457212399953278,
+                "iqr": 0.015577947752717591,
+                "q1": 0.12906720449882414,
+                "q3": 0.14464515225154173,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.12717578999945545,
+                "hd15iqr": 0.14649504000044544,
+                "ops": 7.33170991386517,
+                "total": 0.6819691529999545,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-1K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-1K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 1000,
+                "max_workers": 128
+            },
+            "param": "Greedy-1K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.1347104769993166,
+                "max": 0.1647886249993462,
+                "mean": 0.1529108347996953,
+                "stddev": 0.011499636718676778,
+                "rounds": 5,
+                "median": 0.15521299800093402,
+                "iqr": 0.014494930003820627,
+                "q1": 0.1463807004975024,
+                "q3": 0.16087563050132303,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.1347104769993166,
+                "hd15iqr": 0.1647886249993462,
+                "ops": 6.539758947166462,
+                "total": 0.7645541739984765,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-3K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-3K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 3000,
+                "max_workers": 16
+            },
+            "param": "Greedy-3K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.27473945299789193,
+                "max": 0.48390803700021934,
+                "mean": 0.3566661179997027,
+                "stddev": 0.07689029377383942,
+                "rounds": 5,
+                "median": 0.33963233800022863,
+                "iqr": 0.06022331500025757,
+                "q1": 0.3216133144997002,
+                "q3": 0.3818366294999578,
+                "iqr_outliers": 1,
+                "stddev_outliers": 2,
+                "outliers": "2;1",
+                "ld15iqr": 0.27473945299789193,
+                "hd15iqr": 0.48390803700021934,
+                "ops": 2.8037426308064215,
+                "total": 1.7833305899985135,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-3K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-3K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 3000,
+                "max_workers": 64
+            },
+            "param": "Greedy-3K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.3368487150000874,
+                "max": 0.36616259299989906,
+                "mean": 0.3505272401998809,
+                "stddev": 0.012309806597373995,
+                "rounds": 5,
+                "median": 0.3488475539998035,
+                "iqr": 0.021226732254035596,
+                "q1": 0.340054549497836,
+                "q3": 0.3612812817518716,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.3368487150000874,
+                "hd15iqr": 0.36616259299989906,
+                "ops": 2.8528453293095586,
+                "total": 1.7526362009994045,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-3K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-3K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 3000,
+                "max_workers": 128
+            },
+            "param": "Greedy-3K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.33857721599997603,
+                "max": 0.37430357599805575,
+                "mean": 0.36158201819853275,
+                "stddev": 0.014966250291610162,
+                "rounds": 5,
+                "median": 0.36658735599849024,
+                "iqr": 0.022593703248276142,
+                "q1": 0.35097897599916905,
+                "q3": 0.3735726792474452,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.33857721599997603,
+                "hd15iqr": 0.37430357599805575,
+                "ops": 2.765624255824948,
+                "total": 1.8079100909926638,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-5K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-5K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 5000,
+                "max_workers": 16
+            },
+            "param": "Greedy-5K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.5433112500031712,
+                "max": 0.6595815700020466,
+                "mean": 0.5708715938017122,
+                "stddev": 0.049820935804562025,
+                "rounds": 5,
+                "median": 0.5484803630024544,
+                "iqr": 0.03633879699918907,
+                "q1": 0.5458114987513909,
+                "q3": 0.58215029575058,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 0.5433112500031712,
+                "hd15iqr": 0.6595815700020466,
+                "ops": 1.7517074082115607,
+                "total": 2.8543579690085608,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-5K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-5K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 5000,
+                "max_workers": 64
+            },
+            "param": "Greedy-5K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.5596750790027727,
+                "max": 0.721044093999808,
+                "mean": 0.5972683805994166,
+                "stddev": 0.06967931922462794,
+                "rounds": 5,
+                "median": 0.563973818996601,
+                "iqr": 0.05457473150090664,
+                "q1": 0.5609208724990822,
+                "q3": 0.6154956039999888,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 0.5596750790027727,
+                "hd15iqr": 0.721044093999808,
+                "ops": 1.674289201441408,
+                "total": 2.986341902997083,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-5K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-5K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 5000,
+                "max_workers": 128
+            },
+            "param": "Greedy-5K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.5118065010028658,
+                "max": 0.6004513689986197,
+                "mean": 0.5767136201997346,
+                "stddev": 0.037168722612858786,
+                "rounds": 5,
+                "median": 0.5939332050002122,
+                "iqr": 0.03584047299955273,
+                "q1": 0.562628381999275,
+                "q3": 0.5984688549988277,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.5118065010028658,
+                "hd15iqr": 0.6004513689986197,
+                "ops": 1.7339628629781063,
+                "total": 2.883568100998673,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-10K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-10K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 10000,
+                "max_workers": 16
+            },
+            "param": "Greedy-10K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.0499728759969003,
+                "max": 1.2731925429980038,
+                "mean": 1.1464142213990272,
+                "stddev": 0.09555703407479678,
+                "rounds": 5,
+                "median": 1.1106704000012542,
+                "iqr": 0.16111876925060642,
+                "q1": 1.0716745257486764,
+                "q3": 1.2327932949992828,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 1.0499728759969003,
+                "hd15iqr": 1.2731925429980038,
+                "ops": 0.8722850618336272,
+                "total": 5.732071106995136,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-10K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-10K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 10000,
+                "max_workers": 64
+            },
+            "param": "Greedy-10K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.0189035929979582,
+                "max": 1.1231969440013927,
+                "mean": 1.0865467113995693,
+                "stddev": 0.0420559489099534,
+                "rounds": 5,
+                "median": 1.1034787009994034,
+                "iqr": 0.0555137499995908,
+                "q1": 1.0601885617497828,
+                "q3": 1.1157023117493736,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 1.0189035929979582,
+                "hd15iqr": 1.1231969440013927,
+                "ops": 0.9203469942971073,
+                "total": 5.432733556997846,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-10K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Greedy-10K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6008a5fb00>]",
+                "tasks": 10000,
+                "max_workers": 128
+            },
+            "param": "Greedy-10K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.0999936830012302,
+                "max": 1.1390599930018652,
+                "mean": 1.120380398600537,
+                "stddev": 0.013901645225316115,
+                "rounds": 5,
+                "median": 1.1204276800017396,
+                "iqr": 0.012592350251907192,
+                "q1": 1.1144932732486268,
+                "q3": 1.127085623500534,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 1.0999936830012302,
+                "hd15iqr": 1.1390599930018652,
+                "ops": 0.8925539943836008,
+                "total": 5.601901993002684,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-1K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-1K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 1000,
+                "max_workers": 16
+            },
+            "param": "Fair-1K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.09185959300157265,
+                "max": 0.12337865900190081,
+                "mean": 0.11240412940096575,
+                "stddev": 0.01227433578882072,
+                "rounds": 5,
+                "median": 0.11631332500110148,
+                "iqr": 0.013573328500569914,
+                "q1": 0.10654401850024442,
+                "q3": 0.12011734700081433,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.09185959300157265,
+                "hd15iqr": 0.12337865900190081,
+                "ops": 8.896470310559677,
+                "total": 0.5620206470048288,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-1K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-1K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 1000,
+                "max_workers": 64
+            },
+            "param": "Fair-1K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.1259547340014251,
+                "max": 0.13327390900303726,
+                "mean": 0.13018018160073552,
+                "stddev": 0.0029456013448991404,
+                "rounds": 5,
+                "median": 0.12958637500196346,
+                "iqr": 0.004303517248445132,
+                "q1": 0.12853403050030465,
+                "q3": 0.13283754774874978,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.1259547340014251,
+                "hd15iqr": 0.13327390900303726,
+                "ops": 7.681660815829972,
+                "total": 0.6509009080036776,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-1K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-1K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 1000,
+                "max_workers": 128
+            },
+            "param": "Fair-1K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.15598529500130098,
+                "max": 0.17085874699841952,
+                "mean": 0.16092106580035762,
+                "stddev": 0.00592724629667622,
+                "rounds": 5,
+                "median": 0.15827268300199648,
+                "iqr": 0.006647432503086748,
+                "q1": 0.15734001549844834,
+                "q3": 0.16398744800153509,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.15598529500130098,
+                "hd15iqr": 0.17085874699841952,
+                "ops": 6.21422680136001,
+                "total": 0.804605329001788,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-3K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-3K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 3000,
+                "max_workers": 16
+            },
+            "param": "Fair-3K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.27266165599939995,
+                "max": 0.338861779000581,
+                "mean": 0.3113943191994622,
+                "stddev": 0.029844050232358015,
+                "rounds": 5,
+                "median": 0.3237629969989939,
+                "iqr": 0.05258744524871872,
+                "q1": 0.2832786432500143,
+                "q3": 0.335866088498733,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.27266165599939995,
+                "hd15iqr": 0.338861779000581,
+                "ops": 3.2113623735038486,
+                "total": 1.556971595997311,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-3K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-3K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 3000,
+                "max_workers": 64
+            },
+            "param": "Fair-3K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.3003321190008137,
+                "max": 0.361929720002081,
+                "mean": 0.33851234019966797,
+                "stddev": 0.024448977890789165,
+                "rounds": 5,
+                "median": 0.3364789869992819,
+                "iqr": 0.031821369501813024,
+                "q1": 0.3270548732480165,
+                "q3": 0.35887624274982954,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.3003321190008137,
+                "hd15iqr": 0.361929720002081,
+                "ops": 2.9541020555119513,
+                "total": 1.6925617009983398,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-3K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-3K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 3000,
+                "max_workers": 128
+            },
+            "param": "Fair-3K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.3725023359984334,
+                "max": 0.4912125199989532,
+                "mean": 0.39865479039945056,
+                "stddev": 0.051800842260201575,
+                "rounds": 5,
+                "median": 0.3774418569992122,
+                "iqr": 0.033237073750569834,
+                "q1": 0.3733897847496337,
+                "q3": 0.4066268585002035,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 0.3725023359984334,
+                "hd15iqr": 0.4912125199989532,
+                "ops": 2.5084359302393024,
+                "total": 1.9932739519972529,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-5K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-5K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 5000,
+                "max_workers": 16
+            },
+            "param": "Fair-5K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.4908476669988886,
+                "max": 0.7044653939992713,
+                "mean": 0.5684916580008575,
+                "stddev": 0.08012550874726963,
+                "rounds": 5,
+                "median": 0.5487376030032465,
+                "iqr": 0.05908443974931288,
+                "q1": 0.5317747725011941,
+                "q3": 0.590859212250507,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 0.4908476669988886,
+                "hd15iqr": 0.7044653939992713,
+                "ops": 1.7590407632656793,
+                "total": 2.842458290004288,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-5K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-5K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 5000,
+                "max_workers": 64
+            },
+            "param": "Fair-5K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.5194258360024833,
+                "max": 0.576107922999654,
+                "mean": 0.5515725678007584,
+                "stddev": 0.022186953834070138,
+                "rounds": 5,
+                "median": 0.5526102430012543,
+                "iqr": 0.03287438850020408,
+                "q1": 0.5366490895003153,
+                "q3": 0.5695234780005194,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.5194258360024833,
+                "hd15iqr": 0.576107922999654,
+                "ops": 1.8129980683905669,
+                "total": 2.757862839003792,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-5K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-5K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 5000,
+                "max_workers": 128
+            },
+            "param": "Fair-5K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.5537146050010051,
+                "max": 0.6077765390000422,
+                "mean": 0.5844187902002886,
+                "stddev": 0.021933930533346614,
+                "rounds": 5,
+                "median": 0.5817952119978145,
+                "iqr": 0.034177243250269385,
+                "q1": 0.5701506195009642,
+                "q3": 0.6043278627512336,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.5537146050010051,
+                "hd15iqr": 0.6077765390000422,
+                "ops": 1.7111017249416052,
+                "total": 2.922093951001443,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-10K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-10K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 10000,
+                "max_workers": 16
+            },
+            "param": "Fair-10K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.027011512000172,
+                "max": 1.2338077480017091,
+                "mean": 1.1128390716003196,
+                "stddev": 0.09103926188430571,
+                "rounds": 5,
+                "median": 1.1003943830000935,
+                "iqr": 0.16162134725254873,
+                "q1": 1.0279098769988195,
+                "q3": 1.1895312242513683,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 1.027011512000172,
+                "hd15iqr": 1.2338077480017091,
+                "ops": 0.8986025253066904,
+                "total": 5.564195358001598,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-10K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-10K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 10000,
+                "max_workers": 64
+            },
+            "param": "Fair-10K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.0493441140024515,
+                "max": 1.4249597500020172,
+                "mean": 1.1908387317998859,
+                "stddev": 0.1655094718434122,
+                "rounds": 5,
+                "median": 1.1179126649985847,
+                "iqr": 0.27523616699909326,
+                "q1": 1.057411323249653,
+                "q3": 1.3326474902487462,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 1.0493441140024515,
+                "hd15iqr": 1.4249597500020172,
+                "ops": 0.8397442687210519,
+                "total": 5.954193658999429,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-10K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Fair-10K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877e700>]",
+                "tasks": 10000,
+                "max_workers": 128
+            },
+            "param": "Fair-10K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.114671986000758,
+                "max": 1.5701579680026043,
+                "mean": 1.2628096393993473,
+                "stddev": 0.19669841959436582,
+                "rounds": 5,
+                "median": 1.1593225839969818,
+                "iqr": 0.285197441749915,
+                "q1": 1.11921589549911,
+                "q3": 1.404413337249025,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 1.114671986000758,
+                "hd15iqr": 1.5701579680026043,
+                "ops": 0.7918849910550634,
+                "total": 6.314048196996737,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-1K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-1K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 1000,
+                "max_workers": 16
+            },
+            "param": "Numpy-1K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.10013707599864574,
+                "max": 0.15059230900078546,
+                "mean": 0.13592690820005374,
+                "stddev": 0.02030856797766507,
+                "rounds": 5,
+                "median": 0.1423486210005649,
+                "iqr": 0.014849337001578533,
+                "q1": 0.13137520524924184,
+                "q3": 0.14622454225082038,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 0.14178791499944055,
+                "hd15iqr": 0.15059230900078546,
+                "ops": 7.3568950639870785,
+                "total": 0.6796345410002687,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-1K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-1K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 1000,
+                "max_workers": 64
+            },
+            "param": "Numpy-1K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.15804705000118702,
+                "max": 0.17157246100032353,
+                "mean": 0.16231956400006312,
+                "stddev": 0.005394615629521394,
+                "rounds": 5,
+                "median": 0.16007111399812857,
+                "iqr": 0.005435251001472352,
+                "q1": 0.1592000114997063,
+                "q3": 0.16463526250117866,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.15804705000118702,
+                "hd15iqr": 0.17157246100032353,
+                "ops": 6.160686828850841,
+                "total": 0.8115978200003156,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-1K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-1K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 1000,
+                "max_workers": 128
+            },
+            "param": "Numpy-1K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.18984214699958102,
+                "max": 0.19454271900031017,
+                "mean": 0.1914508708003268,
+                "stddev": 0.002021440105588844,
+                "rounds": 5,
+                "median": 0.1904072859979351,
+                "iqr": 0.00301583800046501,
+                "q1": 0.1899635150011818,
+                "q3": 0.19297935300164681,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.18984214699958102,
+                "hd15iqr": 0.19454271900031017,
+                "ops": 5.223272141932159,
+                "total": 0.9572543540016341,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-3K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-3K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 3000,
+                "max_workers": 16
+            },
+            "param": "Numpy-3K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.40668470400123624,
+                "max": 0.42600123200099915,
+                "mean": 0.41636748220043956,
+                "stddev": 0.00758396190345287,
+                "rounds": 5,
+                "median": 0.4188086159992963,
+                "iqr": 0.01107536374911433,
+                "q1": 0.40992663225097203,
+                "q3": 0.42100199600008636,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.40668470400123624,
+                "hd15iqr": 0.42600123200099915,
+                "ops": 2.401724540819447,
+                "total": 2.0818374110021978,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-3K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-3K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 3000,
+                "max_workers": 64
+            },
+            "param": "Numpy-3K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.4060805059998529,
+                "max": 0.45293000400124583,
+                "mean": 0.42478793840055007,
+                "stddev": 0.017743761886545813,
+                "rounds": 5,
+                "median": 0.4202857419986685,
+                "iqr": 0.021490385499419062,
+                "q1": 0.4133724110015464,
+                "q3": 0.4348627965009655,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.4060805059998529,
+                "hd15iqr": 0.45293000400124583,
+                "ops": 2.3541158060308645,
+                "total": 2.1239396920027502,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-3K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-3K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 3000,
+                "max_workers": 128
+            },
+            "param": "Numpy-3K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.45040275800056406,
+                "max": 0.47379931100294925,
+                "mean": 0.46199299880172473,
+                "stddev": 0.009210313882433612,
+                "rounds": 5,
+                "median": 0.46404616400104715,
+                "iqr": 0.013982862000375462,
+                "q1": 0.45417761300177517,
+                "q3": 0.46816047500215063,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.45040275800056406,
+                "hd15iqr": 0.47379931100294925,
+                "ops": 2.1645349661005873,
+                "total": 2.3099649940086238,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-5K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-5K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 5000,
+                "max_workers": 16
+            },
+            "param": "Numpy-5K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.6166050479987462,
+                "max": 0.7010300690017175,
+                "mean": 0.6690991682000458,
+                "stddev": 0.03621803134951132,
+                "rounds": 5,
+                "median": 0.6780307900007756,
+                "iqr": 0.05970535625147022,
+                "q1": 0.641037936748944,
+                "q3": 0.7007432930004143,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.6166050479987462,
+                "hd15iqr": 0.7010300690017175,
+                "ops": 1.494546769038909,
+                "total": 3.345495841000229,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-5K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-5K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 5000,
+                "max_workers": 64
+            },
+            "param": "Numpy-5K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.6665932100004284,
+                "max": 0.7189386499994725,
+                "mean": 0.6954955249995691,
+                "stddev": 0.021743822521216705,
+                "rounds": 5,
+                "median": 0.6971211549971486,
+                "iqr": 0.03671458799908578,
+                "q1": 0.6778934172507434,
+                "q3": 0.7146080052498291,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.6665932100004284,
+                "hd15iqr": 0.7189386499994725,
+                "ops": 1.4378237732020194,
+                "total": 3.477477624997846,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-5K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-5K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 5000,
+                "max_workers": 128
+            },
+            "param": "Numpy-5K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.692207641001005,
+                "max": 0.9420205740025267,
+                "mean": 0.7985874486003013,
+                "stddev": 0.1188544184184444,
+                "rounds": 5,
+                "median": 0.7256104689986387,
+                "iqr": 0.20728237699950114,
+                "q1": 0.7130492980004419,
+                "q3": 0.9203316749999431,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.692207641001005,
+                "hd15iqr": 0.9420205740025267,
+                "ops": 1.2522110155283785,
+                "total": 3.9929372430015064,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-10K-16w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-10K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 10000,
+                "max_workers": 16
+            },
+            "param": "Numpy-10K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.308755296999152,
+                "max": 1.3896508880025067,
+                "mean": 1.3473776127997552,
+                "stddev": 0.029853680879625286,
+                "rounds": 5,
+                "median": 1.3433149299999059,
+                "iqr": 0.03764153400061332,
+                "q1": 1.3291676119988551,
+                "q3": 1.3668091459994685,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 1.308755296999152,
+                "hd15iqr": 1.3896508880025067,
+                "ops": 0.7421824368315507,
+                "total": 6.7368880639987765,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-10K-64w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-10K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 10000,
+                "max_workers": 64
+            },
+            "param": "Numpy-10K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.328390621998551,
+                "max": 1.8151780039988807,
+                "mean": 1.4521099401987159,
+                "stddev": 0.20385457932871398,
+                "rounds": 5,
+                "median": 1.3725668199986103,
+                "iqr": 0.12426059075005469,
+                "q1": 1.359971128498728,
+                "q3": 1.4842317192487826,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 1.328390621998551,
+                "hd15iqr": 1.8151780039988807,
+                "ops": 0.688653091833497,
+                "total": 7.260549700993579,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-10K-128w]",
+            "fullname": "tests/benchmark/test_overhead.py::test_sync_workload[Numpy-10K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f600877ec00>]",
+                "tasks": 10000,
+                "max_workers": 128
+            },
+            "param": "Numpy-10K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.3944445999986783,
+                "max": 1.871374004000245,
+                "mean": 1.498608272599813,
+                "stddev": 0.2085151104042083,
+                "rounds": 5,
+                "median": 1.408136394999019,
+                "iqr": 0.12741405749784462,
+                "q1": 1.4016776832513642,
+                "q3": 1.5290917407492088,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 1.3944445999986783,
+                "hd15iqr": 1.871374004000245,
+                "ops": 0.6672857866086523,
+                "total": 7.493041362999065,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Greedy-1K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Greedy-1K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc1440>]",
+                "tasks": 1000
+            },
+            "param": "Greedy-1K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.006250001999433152,
+                "max": 0.007150080000428716,
+                "mean": 0.006685730599565431,
+                "stddev": 0.00038908567385223893,
+                "rounds": 5,
+                "median": 0.006799910999689018,
+                "iqr": 0.0006710489988108748,
+                "q1": 0.006300233249930898,
+                "q3": 0.0069712822487417725,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.006250001999433152,
+                "hd15iqr": 0.007150080000428716,
+                "ops": 149.57228460042936,
+                "total": 0.03342865299782716,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Greedy-3K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Greedy-3K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc1440>]",
+                "tasks": 3000
+            },
+            "param": "Greedy-3K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.01835244899848476,
+                "max": 0.026720649999333546,
+                "mean": 0.020892928399553055,
+                "stddev": 0.0033357022594359847,
+                "rounds": 5,
+                "median": 0.019801193000603234,
+                "iqr": 0.00283394575217244,
+                "q1": 0.019063545748394972,
+                "q3": 0.021897491500567412,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 0.01835244899848476,
+                "hd15iqr": 0.026720649999333546,
+                "ops": 47.863084622517164,
+                "total": 0.10446464199776528,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Greedy-5K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Greedy-5K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc1440>]",
+                "tasks": 5000
+            },
+            "param": "Greedy-5K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.03126993800105993,
+                "max": 0.04051012600029935,
+                "mean": 0.035505865400045876,
+                "stddev": 0.004170111646179849,
+                "rounds": 5,
+                "median": 0.03482549299951643,
+                "iqr": 0.007729475001724495,
+                "q1": 0.03170418424906529,
+                "q3": 0.03943365925078979,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.03126993800105993,
+                "hd15iqr": 0.04051012600029935,
+                "ops": 28.16436069739362,
+                "total": 0.1775293270002294,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Greedy-10K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Greedy-10K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc1440>]",
+                "tasks": 10000
+            },
+            "param": "Greedy-10K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.06610426399856806,
+                "max": 0.1074457619979512,
+                "mean": 0.08152448179898783,
+                "stddev": 0.01566869625924584,
+                "rounds": 5,
+                "median": 0.07836706099988078,
+                "iqr": 0.016646297496663465,
+                "q1": 0.07176010025068535,
+                "q3": 0.08840639774734882,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.06610426399856806,
+                "hd15iqr": 0.1074457619979512,
+                "ops": 12.266253988165987,
+                "total": 0.4076224089949392,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Fair-1K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Fair-1K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc20c0>]",
+                "tasks": 1000
+            },
+            "param": "Fair-1K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.00610611299998709,
+                "max": 0.006471666998550063,
+                "mean": 0.006303037799807498,
+                "stddev": 0.00015836546655321684,
+                "rounds": 5,
+                "median": 0.006322806002572179,
+                "iqr": 0.0002831192496159929,
+                "q1": 0.006161138999232207,
+                "q3": 0.0064442582488482,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.00610611299998709,
+                "hd15iqr": 0.006471666998550063,
+                "ops": 158.6536574523702,
+                "total": 0.03151518899903749,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Fair-3K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Fair-3K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc20c0>]",
+                "tasks": 3000
+            },
+            "param": "Fair-3K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.019159720999596175,
+                "max": 0.028507184000773123,
+                "mean": 0.021278781999717465,
+                "stddev": 0.004047656804046635,
+                "rounds": 5,
+                "median": 0.019472990999929607,
+                "iqr": 0.0026298172524548136,
+                "q1": 0.019363709748176916,
+                "q3": 0.02199352700063173,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 0.019159720999596175,
+                "hd15iqr": 0.028507184000773123,
+                "ops": 46.99517105881707,
+                "total": 0.10639390999858733,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Fair-5K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Fair-5K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc20c0>]",
+                "tasks": 5000
+            },
+            "param": "Fair-5K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.031951515997207025,
+                "max": 0.05361489699862432,
+                "mean": 0.039451704199018424,
+                "stddev": 0.008496083010632465,
+                "rounds": 5,
+                "median": 0.036097399999562185,
+                "iqr": 0.00954558074954548,
+                "q1": 0.03427102674959315,
+                "q3": 0.04381660749913863,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.031951515997207025,
+                "hd15iqr": 0.05361489699862432,
+                "ops": 25.347447475409197,
+                "total": 0.1972585209950921,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Fair-10K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Fair-10K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc20c0>]",
+                "tasks": 10000
+            },
+            "param": "Fair-10K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.06321145799665828,
+                "max": 0.08335692200125777,
+                "mean": 0.07495353139893268,
+                "stddev": 0.007333702609809712,
+                "rounds": 5,
+                "median": 0.07589872500102501,
+                "iqr": 0.006836906001808529,
+                "q1": 0.07201530149723112,
+                "q3": 0.07885220749903965,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.06321145799665828,
+                "hd15iqr": 0.08335692200125777,
+                "ops": 13.341599539554712,
+                "total": 0.3747676569946634,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Numpy-1K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Numpy-1K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2160>]",
+                "tasks": 1000
+            },
+            "param": "Numpy-1K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.008691013001225656,
+                "max": 0.009777675000805175,
+                "mean": 0.009106953400623752,
+                "stddev": 0.0004683759867559085,
+                "rounds": 5,
+                "median": 0.008921262000512797,
+                "iqr": 0.0007666227511435864,
+                "q1": 0.008729580999897735,
+                "q3": 0.009496203751041321,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.008691013001225656,
+                "hd15iqr": 0.009777675000805175,
+                "ops": 109.80620587467904,
+                "total": 0.04553476700311876,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Numpy-3K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Numpy-3K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2160>]",
+                "tasks": 3000
+            },
+            "param": "Numpy-3K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.02665659700141987,
+                "max": 0.03696132500044769,
+                "mean": 0.029445000000850995,
+                "stddev": 0.004259383692251501,
+                "rounds": 5,
+                "median": 0.027553302003070712,
+                "iqr": 0.003462617501099885,
+                "q1": 0.02724109749942727,
+                "q3": 0.030703715000527154,
+                "iqr_outliers": 1,
+                "stddev_outliers": 1,
+                "outliers": "1;1",
+                "ld15iqr": 0.02665659700141987,
+                "hd15iqr": 0.03696132500044769,
+                "ops": 33.96162336461534,
+                "total": 0.14722500000425498,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Numpy-5K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Numpy-5K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2160>]",
+                "tasks": 5000
+            },
+            "param": "Numpy-5K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.04330995399868698,
+                "max": 0.05821396399915102,
+                "mean": 0.0496586096000101,
+                "stddev": 0.006281002386972102,
+                "rounds": 5,
+                "median": 0.04945844299800228,
+                "iqr": 0.010620399250001356,
+                "q1": 0.043871797751307895,
+                "q3": 0.05449219700130925,
+                "iqr_outliers": 0,
+                "stddev_outliers": 2,
+                "outliers": "2;0",
+                "ld15iqr": 0.04330995399868698,
+                "hd15iqr": 0.05821396399915102,
+                "ops": 20.137494949109424,
+                "total": 0.24829304800005048,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_overhead[Numpy-10K]",
+            "fullname": "tests/benchmark/test_overhead.py::test_async_overhead[Numpy-10K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2160>]",
+                "tasks": 10000
+            },
+            "param": "Numpy-10K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.09338553099951241,
+                "max": 0.1078367320005782,
+                "mean": 0.10320085919956909,
+                "stddev": 0.005981817191023686,
+                "rounds": 5,
+                "median": 0.10630322399811121,
+                "iqr": 0.00751204199877975,
+                "q1": 0.09957631525048782,
+                "q3": 0.10708835724926757,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.09338553099951241,
+                "hd15iqr": 0.1078367320005782,
+                "ops": 9.689841807093941,
+                "total": 0.5160042959978455,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-1K-16w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Greedy-1K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2ac0>]",
+                "tasks": 1000,
+                "max_workers": 16
+            },
+            "param": "Greedy-1K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.18012731099952362,
+                "max": 0.1836594820015307,
+                "mean": 0.1813749530010682,
+                "stddev": 0.0019812644909876823,
+                "rounds": 3,
+                "median": 0.1803380660021503,
+                "iqr": 0.002649128251505317,
+                "q1": 0.1801799997501803,
+                "q3": 0.1828291280016856,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.18012731099952362,
+                "hd15iqr": 0.1836594820015307,
+                "ops": 5.513440436255333,
+                "total": 0.5441248590032046,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-1K-64w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Greedy-1K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2ac0>]",
+                "tasks": 1000,
+                "max_workers": 64
+            },
+            "param": "Greedy-1K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.19156618399938452,
+                "max": 0.2033437630016124,
+                "mean": 0.1961665716674664,
+                "stddev": 0.006297442309264201,
+                "rounds": 3,
+                "median": 0.19358976800140226,
+                "iqr": 0.0088331842516709,
+                "q1": 0.19207207999988896,
+                "q3": 0.20090526425155986,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.19156618399938452,
+                "hd15iqr": 0.2033437630016124,
+                "ops": 5.09770850099353,
+                "total": 0.5884997150023992,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-1K-128w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Greedy-1K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2ac0>]",
+                "tasks": 1000,
+                "max_workers": 128
+            },
+            "param": "Greedy-1K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.23008135800046148,
+                "max": 0.23146674899908248,
+                "mean": 0.2306955059999988,
+                "stddev": 0.0007059293051905944,
+                "rounds": 3,
+                "median": 0.23053841100045247,
+                "iqr": 0.0010390432489657542,
+                "q1": 0.23019562125045923,
+                "q3": 0.23123466449942498,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.23008135800046148,
+                "hd15iqr": 0.23146674899908248,
+                "ops": 4.334718163083789,
+                "total": 0.6920865179999964,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-2K-16w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Greedy-2K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2ac0>]",
+                "tasks": 2000,
+                "max_workers": 16
+            },
+            "param": "Greedy-2K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.3590547460007656,
+                "max": 0.3818486030031636,
+                "mean": 0.37165374866769224,
+                "stddev": 0.011585548159719135,
+                "rounds": 3,
+                "median": 0.3740578969991475,
+                "iqr": 0.0170953927517985,
+                "q1": 0.36280553375036106,
+                "q3": 0.37990092650215956,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.3590547460007656,
+                "hd15iqr": 0.3818486030031636,
+                "ops": 2.6906764793435,
+                "total": 1.1149612460030767,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-2K-64w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Greedy-2K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2ac0>]",
+                "tasks": 2000,
+                "max_workers": 64
+            },
+            "param": "Greedy-2K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.38248032000046805,
+                "max": 0.3857748820009874,
+                "mean": 0.3835963760005446,
+                "stddev": 0.0018868319205152478,
+                "rounds": 3,
+                "median": 0.3825339260001783,
+                "iqr": 0.0024709215003895224,
+                "q1": 0.3824937215003956,
+                "q3": 0.38496464300078514,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.38248032000046805,
+                "hd15iqr": 0.3857748820009874,
+                "ops": 2.606906797259681,
+                "total": 1.1507891280016338,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-2K-128w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Greedy-2K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2ac0>]",
+                "tasks": 2000,
+                "max_workers": 128
+            },
+            "param": "Greedy-2K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.4133986359993287,
+                "max": 0.439909037999314,
+                "mean": 0.4230906533327167,
+                "stddev": 0.014621531625519983,
+                "rounds": 3,
+                "median": 0.4159642859995074,
+                "iqr": 0.019882801499989,
+                "q1": 0.41404004849937337,
+                "q3": 0.43392284999936237,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.4133986359993287,
+                "hd15iqr": 0.439909037999314,
+                "ops": 2.363559658250366,
+                "total": 1.2692719599981501,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-3K-16w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Greedy-3K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2ac0>]",
+                "tasks": 3000,
+                "max_workers": 16
+            },
+            "param": "Greedy-3K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.5486766899994109,
+                "max": 0.5652417860001151,
+                "mean": 0.5589971976660308,
+                "stddev": 0.009003357161755854,
+                "rounds": 3,
+                "median": 0.5630731169985665,
+                "iqr": 0.012423822000528162,
+                "q1": 0.5522757967491998,
+                "q3": 0.564699618749728,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.5486766899994109,
+                "hd15iqr": 0.5652417860001151,
+                "ops": 1.7889177337118662,
+                "total": 1.6769915929980925,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-3K-64w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Greedy-3K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2ac0>]",
+                "tasks": 3000,
+                "max_workers": 64
+            },
+            "param": "Greedy-3K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.5627614859986352,
+                "max": 0.5787106400021003,
+                "mean": 0.5697981850001573,
+                "stddev": 0.008138348959487895,
+                "rounds": 3,
+                "median": 0.5679224289997364,
+                "iqr": 0.011961865502598812,
+                "q1": 0.5640517217489105,
+                "q3": 0.5760135872515093,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.5627614859986352,
+                "hd15iqr": 0.5787106400021003,
+                "ops": 1.755007345275633,
+                "total": 1.7093945550004719,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Greedy-3K-128w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Greedy-3K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2ac0>]",
+                "tasks": 3000,
+                "max_workers": 128
+            },
+            "param": "Greedy-3K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.6090708579977218,
+                "max": 0.6178431839980476,
+                "mean": 0.6143534079977447,
+                "stddev": 0.004652843735238951,
+                "rounds": 3,
+                "median": 0.6161461819974647,
+                "iqr": 0.0065792445002443856,
+                "q1": 0.6108396889976575,
+                "q3": 0.6174189334979019,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.6090708579977218,
+                "hd15iqr": 0.6178431839980476,
+                "ops": 1.6277276026825118,
+                "total": 1.843060223993234,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-1K-16w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Fair-1K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2b60>]",
+                "tasks": 1000,
+                "max_workers": 16
+            },
+            "param": "Fair-1K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.18800150000242866,
+                "max": 0.191131977000623,
+                "mean": 0.18983017500067945,
+                "stddev": 0.0016303888880616544,
+                "rounds": 3,
+                "median": 0.19035704799898667,
+                "iqr": 0.0023478577486457652,
+                "q1": 0.18859038700156816,
+                "q3": 0.19093824475021393,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.18800150000242866,
+                "hd15iqr": 0.191131977000623,
+                "ops": 5.267866396880374,
+                "total": 0.5694905250020383,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-1K-64w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Fair-1K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2b60>]",
+                "tasks": 1000,
+                "max_workers": 64
+            },
+            "param": "Fair-1K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.30312600400066003,
+                "max": 0.3284951040004671,
+                "mean": 0.3199033929995494,
+                "stddev": 0.014531063344260487,
+                "rounds": 3,
+                "median": 0.32808907099752105,
+                "iqr": 0.019026824999855307,
+                "q1": 0.3093667707498753,
+                "q3": 0.3283935957497306,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.30312600400066003,
+                "hd15iqr": 0.3284951040004671,
+                "ops": 3.1259437126426746,
+                "total": 0.9597101789986482,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-1K-128w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Fair-1K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2b60>]",
+                "tasks": 1000,
+                "max_workers": 128
+            },
+            "param": "Fair-1K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.32866308400116395,
+                "max": 0.362811345999944,
+                "mean": 0.34935426466715097,
+                "stddev": 0.01818722337951067,
+                "rounds": 3,
+                "median": 0.3565883640003449,
+                "iqr": 0.025611196499085054,
+                "q1": 0.3356444040009592,
+                "q3": 0.36125560050004424,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.32866308400116395,
+                "hd15iqr": 0.362811345999944,
+                "ops": 2.862423909302367,
+                "total": 1.0480627940014529,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-2K-16w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Fair-2K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2b60>]",
+                "tasks": 2000,
+                "max_workers": 16
+            },
+            "param": "Fair-2K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.37534319200130994,
+                "max": 0.38344439799766405,
+                "mean": 0.37875480133273715,
+                "stddev": 0.004199086015703912,
+                "rounds": 3,
+                "median": 0.3774768139992375,
+                "iqr": 0.006075904497265583,
+                "q1": 0.37587659750079183,
+                "q3": 0.3819525019980574,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.37534319200130994,
+                "hd15iqr": 0.38344439799766405,
+                "ops": 2.640230556764605,
+                "total": 1.1362644039982115,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-2K-64w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Fair-2K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2b60>]",
+                "tasks": 2000,
+                "max_workers": 64
+            },
+            "param": "Fair-2K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.6176031159993727,
+                "max": 0.6468658949997916,
+                "mean": 0.6340217096658307,
+                "stddev": 0.014955261779802078,
+                "rounds": 3,
+                "median": 0.6375961179983278,
+                "iqr": 0.02194708425031422,
+                "q1": 0.6226013664991115,
+                "q3": 0.6445484507494257,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.6176031159993727,
+                "hd15iqr": 0.6468658949997916,
+                "ops": 1.5772330580400202,
+                "total": 1.9020651289974921,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-2K-128w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Fair-2K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2b60>]",
+                "tasks": 2000,
+                "max_workers": 128
+            },
+            "param": "Fair-2K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.6465638629997557,
+                "max": 0.7031998019992898,
+                "mean": 0.6654560466668045,
+                "stddev": 0.032687057259449856,
+                "rounds": 3,
+                "median": 0.646604475001368,
+                "iqr": 0.04247695424965059,
+                "q1": 0.6465740160001587,
+                "q3": 0.6890509702498093,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.6465638629997557,
+                "hd15iqr": 0.7031998019992898,
+                "ops": 1.5027288504009981,
+                "total": 1.9963681400004134,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-3K-16w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Fair-3K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2b60>]",
+                "tasks": 3000,
+                "max_workers": 16
+            },
+            "param": "Fair-3K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.5561616089980816,
+                "max": 0.5637178819997644,
+                "mean": 0.5590400176661205,
+                "stddev": 0.004086911540313537,
+                "rounds": 3,
+                "median": 0.5572405620005156,
+                "iqr": 0.005667204751262034,
+                "q1": 0.5564313472486901,
+                "q3": 0.5620985519999522,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.5561616089980816,
+                "hd15iqr": 0.5637178819997644,
+                "ops": 1.7887807105022617,
+                "total": 1.6771200529983616,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-3K-64w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Fair-3K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2b60>]",
+                "tasks": 3000,
+                "max_workers": 64
+            },
+            "param": "Fair-3K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.9441296100012551,
+                "max": 0.9592454220000945,
+                "mean": 0.9522172013336482,
+                "stddev": 0.007613385761405134,
+                "rounds": 3,
+                "median": 0.953276571999595,
+                "iqr": 0.011336858999129618,
+                "q1": 0.94641635050084,
+                "q3": 0.9577532094999697,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.9441296100012551,
+                "hd15iqr": 0.9592454220000945,
+                "ops": 1.050180566576017,
+                "total": 2.8566516040009446,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Fair-3K-128w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Fair-3K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2b60>]",
+                "tasks": 3000,
+                "max_workers": 128
+            },
+            "param": "Fair-3K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.9595739810029045,
+                "max": 0.9916922630000045,
+                "mean": 0.9742778913338649,
+                "stddev": 0.016229786200022318,
+                "rounds": 3,
+                "median": 0.9715674299986858,
+                "iqr": 0.02408871149782499,
+                "q1": 0.9625723432518498,
+                "q3": 0.9866610547496748,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.9595739810029045,
+                "hd15iqr": 0.9916922630000045,
+                "ops": 1.0264012032859735,
+                "total": 2.9228336740015948,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-1K-16w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Numpy-1K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2c00>]",
+                "tasks": 1000,
+                "max_workers": 16
+            },
+            "param": "Numpy-1K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.22846116199798416,
+                "max": 0.2388784949980618,
+                "mean": 0.23446151233292767,
+                "stddev": 0.005386139303060662,
+                "rounds": 3,
+                "median": 0.23604488000273705,
+                "iqr": 0.007812999750058225,
+                "q1": 0.23035709149917238,
+                "q3": 0.2381700912492306,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.22846116199798416,
+                "hd15iqr": 0.2388784949980618,
+                "ops": 4.265092338822897,
+                "total": 0.703384536998783,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-1K-64w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Numpy-1K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2c00>]",
+                "tasks": 1000,
+                "max_workers": 64
+            },
+            "param": "Numpy-1K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.5758312710022437,
+                "max": 0.6047100180003326,
+                "mean": 0.5900317556673448,
+                "stddev": 0.014445300643110746,
+                "rounds": 3,
+                "median": 0.5895539779994579,
+                "iqr": 0.021659060248566675,
+                "q1": 0.5792619477515473,
+                "q3": 0.6009210080001139,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.5758312710022437,
+                "hd15iqr": 0.6047100180003326,
+                "ops": 1.6948240334437052,
+                "total": 1.7700952670020342,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-1K-128w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Numpy-1K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2c00>]",
+                "tasks": 1000,
+                "max_workers": 128
+            },
+            "param": "Numpy-1K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.6676064080020296,
+                "max": 0.6711198889970547,
+                "mean": 0.6691308663333378,
+                "stddev": 0.0018022214597019535,
+                "rounds": 3,
+                "median": 0.6686663020009291,
+                "iqr": 0.002635110746268765,
+                "q1": 0.6678713815017545,
+                "q3": 0.6705064922480233,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.6676064080020296,
+                "hd15iqr": 0.6711198889970547,
+                "ops": 1.494475969222192,
+                "total": 2.0073925990000134,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-2K-16w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Numpy-2K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2c00>]",
+                "tasks": 2000,
+                "max_workers": 16
+            },
+            "param": "Numpy-2K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.46926241800247226,
+                "max": 0.47744142600276973,
+                "mean": 0.4725334980018185,
+                "stddev": 0.004328220939658852,
+                "rounds": 3,
+                "median": 0.4708966500002134,
+                "iqr": 0.006134256000223104,
+                "q1": 0.46967097600190755,
+                "q3": 0.47580523200213065,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.46926241800247226,
+                "hd15iqr": 0.47744142600276973,
+                "ops": 2.116252084198593,
+                "total": 1.4176004940054554,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-2K-64w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Numpy-2K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2c00>]",
+                "tasks": 2000,
+                "max_workers": 64
+            },
+            "param": "Numpy-2K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.1841963689985278,
+                "max": 1.2053400129989313,
+                "mean": 1.1940411139985372,
+                "stddev": 0.010646564858985118,
+                "rounds": 3,
+                "median": 1.1925869599981525,
+                "iqr": 0.015857733000302687,
+                "q1": 1.186294016748434,
+                "q3": 1.2021517497487366,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 1.1841963689985278,
+                "hd15iqr": 1.2053400129989313,
+                "ops": 0.8374920999589844,
+                "total": 3.5821233419956116,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-2K-128w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Numpy-2K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2c00>]",
+                "tasks": 2000,
+                "max_workers": 128
+            },
+            "param": "Numpy-2K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.3361549149994971,
+                "max": 1.3591310369993153,
+                "mean": 1.347927950999292,
+                "stddev": 0.011498659825793248,
+                "rounds": 3,
+                "median": 1.3484979009990639,
+                "iqr": 0.0172320914998636,
+                "q1": 1.3392406614993888,
+                "q3": 1.3564727529992524,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 1.3361549149994971,
+                "hd15iqr": 1.3591310369993153,
+                "ops": 0.7418794151858382,
+                "total": 4.043783852997876,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-3K-16w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Numpy-3K-16w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2c00>]",
+                "tasks": 3000,
+                "max_workers": 16
+            },
+            "param": "Numpy-3K-16w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.7123973060006392,
+                "max": 0.7226012959981745,
+                "mean": 0.7184025096673091,
+                "stddev": 0.005336451129802601,
+                "rounds": 3,
+                "median": 0.7202089270031138,
+                "iqr": 0.007652992498151434,
+                "q1": 0.7143502112512579,
+                "q3": 0.7220032037494093,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.7123973060006392,
+                "hd15iqr": 0.7226012959981745,
+                "ops": 1.3919773198775407,
+                "total": 2.1552075290019275,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-3K-64w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Numpy-3K-64w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2c00>]",
+                "tasks": 3000,
+                "max_workers": 64
+            },
+            "param": "Numpy-3K-64w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.8058367019984871,
+                "max": 1.8139765090018045,
+                "mean": 1.8085624733333436,
+                "stddev": 0.004688729930195397,
+                "rounds": 3,
+                "median": 1.8058742089997395,
+                "iqr": 0.006104855252488051,
+                "q1": 1.8058460787488002,
+                "q3": 1.8119509340012883,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 1.8058367019984871,
+                "hd15iqr": 1.8139765090018045,
+                "ops": 0.5529253286765979,
+                "total": 5.425687420000031,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_sync_workload[Numpy-3K-128w]",
+            "fullname": "tests/benchmark/test_workload.py::test_sync_workload[Numpy-3K-128w]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2c00>]",
+                "tasks": 3000,
+                "max_workers": 128
+            },
+            "param": "Numpy-3K-128w",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.9927821409983153,
+                "max": 2.029447329001414,
+                "mean": 2.0095318973326357,
+                "stddev": 0.0185364540316652,
+                "rounds": 3,
+                "median": 2.006366221998178,
+                "iqr": 0.027498891002323944,
+                "q1": 1.996178161248281,
+                "q3": 2.023677052250605,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 1.9927821409983153,
+                "hd15iqr": 2.029447329001414,
+                "ops": 0.4976283289294169,
+                "total": 6.028595691997907,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_workload[Greedy-1K]",
+            "fullname": "tests/benchmark/test_workload.py::test_async_workload[Greedy-1K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2980>]",
+                "tasks": 1000
+            },
+            "param": "Greedy-1K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.05738556299911579,
+                "max": 0.07271783400210552,
+                "mean": 0.06263030099944444,
+                "stddev": 0.00873837119280486,
+                "rounds": 3,
+                "median": 0.05778750599711202,
+                "iqr": 0.011499203252242296,
+                "q1": 0.05748604874861485,
+                "q3": 0.06898525200085714,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.05738556299911579,
+                "hd15iqr": 0.07271783400210552,
+                "ops": 15.966712342782296,
+                "total": 0.18789090299833333,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_workload[Greedy-2K]",
+            "fullname": "tests/benchmark/test_workload.py::test_async_workload[Greedy-2K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2980>]",
+                "tasks": 2000
+            },
+            "param": "Greedy-2K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.10903621699981159,
+                "max": 0.13320602200110443,
+                "mean": 0.12152289499984666,
+                "stddev": 0.012104922102428299,
+                "rounds": 3,
+                "median": 0.12232644599862397,
+                "iqr": 0.018127353750969633,
+                "q1": 0.11235877424951468,
+                "q3": 0.1304861280004843,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.10903621699981159,
+                "hd15iqr": 0.13320602200110443,
+                "ops": 8.228902051759562,
+                "total": 0.36456868499954,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_workload[Greedy-3K]",
+            "fullname": "tests/benchmark/test_workload.py::test_async_workload[Greedy-3K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2980>]",
+                "tasks": 3000
+            },
+            "param": "Greedy-3K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.17931429199961713,
+                "max": 0.20849684699715,
+                "mean": 0.19424980266558123,
+                "stddev": 0.014603453990964068,
+                "rounds": 3,
+                "median": 0.19493826899997657,
+                "iqr": 0.021886916248149646,
+                "q1": 0.183220286249707,
+                "q3": 0.20510720249785663,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.17931429199961713,
+                "hd15iqr": 0.20849684699715,
+                "ops": 5.148010377758743,
+                "total": 0.5827494079967437,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_workload[Fair-1K]",
+            "fullname": "tests/benchmark/test_workload.py::test_async_workload[Fair-1K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2d40>]",
+                "tasks": 1000
+            },
+            "param": "Fair-1K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.05616615299732075,
+                "max": 0.06909337399702054,
+                "mean": 0.06059461666518473,
+                "stddev": 0.007362318152389006,
+                "rounds": 3,
+                "median": 0.056524323001212906,
+                "iqr": 0.009695415749774838,
+                "q1": 0.05625569549829379,
+                "q3": 0.06595111124806863,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.05616615299732075,
+                "hd15iqr": 0.06909337399702054,
+                "ops": 16.503116201320246,
+                "total": 0.1817838499955542,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_workload[Fair-2K]",
+            "fullname": "tests/benchmark/test_workload.py::test_async_workload[Fair-2K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2d40>]",
+                "tasks": 2000
+            },
+            "param": "Fair-2K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.11451581700021052,
+                "max": 0.1323595980029495,
+                "mean": 0.12382410366747838,
+                "stddev": 0.008946956807176953,
+                "rounds": 3,
+                "median": 0.12459689599927515,
+                "iqr": 0.013382835752054234,
+                "q1": 0.11703608674997668,
+                "q3": 0.1304189225020309,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.11451581700021052,
+                "hd15iqr": 0.1323595980029495,
+                "ops": 8.075972047295696,
+                "total": 0.37147231100243516,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_workload[Fair-3K]",
+            "fullname": "tests/benchmark/test_workload.py::test_async_workload[Fair-3K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2d40>]",
+                "tasks": 3000
+            },
+            "param": "Fair-3K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.19038274299964542,
+                "max": 0.20398702999955276,
+                "mean": 0.19926714033378326,
+                "stddev": 0.007699123280210947,
+                "rounds": 3,
+                "median": 0.20343164800215163,
+                "iqr": 0.010203215249930508,
+                "q1": 0.19364496925027197,
+                "q3": 0.20384818450020248,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.19038274299964542,
+                "hd15iqr": 0.20398702999955276,
+                "ops": 5.0183888739756375,
+                "total": 0.5978014210013498,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_workload[Numpy-1K]",
+            "fullname": "tests/benchmark/test_workload.py::test_async_workload[Numpy-1K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2de0>]",
+                "tasks": 1000
+            },
+            "param": "Numpy-1K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.26271461799842655,
+                "max": 0.2727644850019715,
+                "mean": 0.2672967223334126,
+                "stddev": 0.0050831338473529795,
+                "rounds": 3,
+                "median": 0.2664110639998398,
+                "iqr": 0.007537400252658699,
+                "q1": 0.26363872949877987,
+                "q3": 0.27117612975143857,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.26271461799842655,
+                "hd15iqr": 0.2727644850019715,
+                "ops": 3.7411607268144866,
+                "total": 0.8018901670002379,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_workload[Numpy-2K]",
+            "fullname": "tests/benchmark/test_workload.py::test_async_workload[Numpy-2K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2de0>]",
+                "tasks": 2000
+            },
+            "param": "Numpy-2K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.9810329559986712,
+                "max": 0.9925116919985157,
+                "mean": 0.9878200086665553,
+                "stddev": 0.00601940815437684,
+                "rounds": 3,
+                "median": 0.989915378002479,
+                "iqr": 0.008609051999883377,
+                "q1": 0.9832535614996232,
+                "q3": 0.9918626134995066,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.9810329559986712,
+                "hd15iqr": 0.9925116919985157,
+                "ops": 1.0123301727304412,
+                "total": 2.963460025999666,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_async_workload[Numpy-3K]",
+            "fullname": "tests/benchmark/test_workload.py::test_async_workload[Numpy-3K]",
+            "params": {
+                "semaphore_factory": "UNSERIALIZABLE[<function <lambda> at 0x7f6005fc2de0>]",
+                "tasks": 3000
+            },
+            "param": "Numpy-3K",
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 2.129216497000016,
+                "max": 2.1641138560007676,
+                "mean": 2.1486150296671744,
+                "stddev": 0.017772512439800787,
+                "rounds": 3,
+                "median": 2.1525147360007395,
+                "iqr": 0.02617301925056381,
+                "q1": 2.1350410567501967,
+                "q3": 2.1612140760007605,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 2.129216497000016,
+                "hd15iqr": 2.1641138560007676,
+                "ops": 0.46541608719683136,
+                "total": 6.445845089001523,
+                "iterations": 1
+            }
+        }
+    ],
+    "datetime": "2026-08-08T22:55:13.775220+00:00",
+    "version": "5.2.3"
+}
