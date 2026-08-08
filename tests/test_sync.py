@@ -5,14 +5,14 @@ from typing import Literal
 import pytest
 
 from resource_semaphore.base import SemaphoreError, Ticket
-from resource_semaphore.np import NumpyResourceSemaphore
 from resource_semaphore.synchronous import (
+    GreedyResourceSemaphore,
     NoopResourceSemaphore,
     ResourceSemaphore,
 )
 
 
-@pytest.fixture(params=[ResourceSemaphore, NumpyResourceSemaphore])
+@pytest.fixture(params=[ResourceSemaphore, GreedyResourceSemaphore])
 def semaphore_cls(request):
     return request.param
 

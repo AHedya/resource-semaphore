@@ -3,8 +3,6 @@
 This document tracks planned features, enhancements, and records previously completed milestones for the `resource-semaphore` project.
 
 ## Planned Features
-
-- [x] **NumPy Vectorization:** Implement matrix-based vectorization for fast Python-time queue scanning (`NumpyResourceSemaphore`).
 - [x] **Resource Discovery Utilities:** Provide out-of-the-box helpers (e.g., via `psutil`) to automatically discover and read physical machine resources (Total RAM, CPU cores, DB connection limits) to initialize the semaphore dynamically.
 - [x] **Tickets:** Add ticket-based resource-release mechanism.
 - [x] **FIFO**: Provide an order-maintaining mechanism. Keep the claim order, and notify on order

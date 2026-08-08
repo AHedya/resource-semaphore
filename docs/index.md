@@ -2,8 +2,6 @@
 
 Resource Semaphore is a typed, high-level synchronization library for managing multiple constrained resources within a single process. It applies backpressure to prevent resource exhaustion.
 
-> **What's New in v1.3.0**: We introduced **Infinite Bypass Fairness** to automatically prevent pipeline deadlocks without configuration, and added a blistering fast **NumPy Vectorization Backend** for high-contention throughput! See the [Changelog](./CHANGELOG.md) for details.
-
 ## Installation
 
 ```bash
@@ -220,20 +218,3 @@ semaphore = ResourceSemaphore(
 ```
 
 Async variants (`aget_cpu`, `aget_memory`, `aget_storage`) are also available if you are discovering resources during application startup in an async context.
-
-## NumPy Vectorized Semaphores
-
-For applications operating under massive concurrency where evaluating the wait-queue via Python loops becomes a CPU bottleneck, we offer a dedicated **NumPy Vectorization Backend**.
-
-```bash
-pip install "resource-semaphore[numpy]"
-```
-
-The `resource_semaphore.np` subpackage provides `NumpyResourceSemaphore` and `AsyncNumpyResourceSemaphore`. These classes maintain the exact same API and fairness guarantees as their standard counterparts, but they stack waiters' demands into a matrix (`np.vstack`) and resolve the queue using C-space boolean evaluations (`np.all`), granting $O(1)$ Python-time queue resolutions.
-
-```python
-from resource_semaphore.np import AsyncNumpyResourceSemaphore
-
-# Drop-in replacement for AsyncResourceSemaphore
-semaphore = AsyncNumpyResourceSemaphore({"db_conn": 2})
-```

@@ -36,8 +36,6 @@ Documentation = "https://github.com/ahedya/resource-semaphore/tree/main/docs"
 
 [project.optional-dependencies]
 utils = ["psutil>=7.2.2"]
-np = ["numpy~=2.4.6"]
-all = ["resource-semaphore[utils,numpy]"]
 
 [dependency-groups]
 dev = [

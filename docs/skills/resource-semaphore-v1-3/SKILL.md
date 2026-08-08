@@ -1,6 +1,6 @@
 ---
-name: resource-semaphore-v1-1
-description: Generates Python concurrency code using version v1.1.* of the resource-semaphore library to apply multi-resource backpressure. Use this when the user needs to manage constrained resources like CPU, RAM, or DB connections across threads or asyncio tasks.
+name: resource-semaphore-v1-3
+description: Generates Python concurrency code using version v1.3.* of the resource-semaphore library to apply multi-resource backpressure. Use this when the user needs to manage constrained resources like CPU, RAM, or DB connections across threads or asyncio tasks.
 ---
 
 # Resource Semaphore Skill
@@ -15,11 +15,13 @@ When asked to implement rate-limiting, resource constraints, or backpressure usi
 
   semaphore = AsyncResourceSemaphore(resources={"db_conn": 2, "ram_mb": 4096})
   ```
-- **Fairness & Lookahead**: The standard semaphore uses FIFO head-of-line blocking by default to prevent starvation. However, to prevent heavy tasks from blocking lighter tasks when resources are available, it supports a `lookahead_window` (default: 1). Set this higher to allow smaller queued requests to safely bypass blocked heavy tasks if they fit within the buffer.
+- **Fairness & Infinite Bypass**: The standard semaphore uses an intelligent FIFO queue by default. While it prioritizes older requests to prevent starvation, it natively evaluates the entire queue and automatically allows smaller tasks to safely bypass blocked heavy tasks if leftover capacity permits. This totally eliminates head-of-line blocking deadlocks.
   ```python
-  semaphore = AsyncResourceSemaphore({"db_conn": 10}, lookahead_window=5)
+  # Even if a task is blocked waiting for 10 CPU cores,
+  # a smaller task needing only 1 CPU core can immediately bypass it if available.
+  semaphore = AsyncResourceSemaphore({"cpu": 10})
   ```
-- **Greedy Variants**: If fairness is not required and starvation is unlikely, use the hyper-optimized `GreedyResourceSemaphore` or `AsyncGreedyResourceSemaphore`. These variants skip queue tracking entirely and allow tasks to aggressively acquire resources the instant they become available, regardless of queue position.
+- **Greedy Variants**: If strict fairness is not required and starvation is unlikely, use the hyper-optimized `GreedyResourceSemaphore` or `AsyncGreedyResourceSemaphore`. These variants skip queue tracking entirely and allow tasks to aggressively acquire resources the instant they become available, regardless of queue position.
   ```python
   from resource_semaphore import AsyncGreedyResourceSemaphore
 

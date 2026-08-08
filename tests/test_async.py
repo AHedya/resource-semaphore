@@ -4,14 +4,14 @@ from typing import Literal
 import pytest
 
 from resource_semaphore.asynchronous import (
+    AsyncGreedyResourceSemaphore,
     AsyncNoopResourceSemaphore,
     AsyncResourceSemaphore,
 )
 from resource_semaphore.base import SemaphoreError, Ticket
-from resource_semaphore.np import AsyncNumpyResourceSemaphore
 
 
-@pytest.fixture(params=[AsyncResourceSemaphore, AsyncNumpyResourceSemaphore])
+@pytest.fixture(params=[AsyncResourceSemaphore, AsyncGreedyResourceSemaphore])
 def async_semaphore_cls(request):
     return request.param
 

@@ -10,7 +10,6 @@ from resource_semaphore.asynchronous import (
     AsyncResourceSemaphore,
 )
 from resource_semaphore.base import BaseAsyncResourceSemaphore, BaseResourceSemaphore
-from resource_semaphore.np import AsyncNumpyResourceSemaphore, NumpyResourceSemaphore
 from resource_semaphore.synchronous import (
     GreedyResourceSemaphore,
     ResourceSemaphore,
@@ -36,9 +35,8 @@ ROUNDS = 5
     [
         lambda: GreedyResourceSemaphore(resources=RESOURCES),
         lambda: ResourceSemaphore(resources=RESOURCES),
-        lambda: NumpyResourceSemaphore(resources=RESOURCES),
     ],
-    ids=["Greedy", "Fair", "Numpy"],
+    ids=["Greedy", "Fair"],
 )
 def test_sync_workload(
     benchmark: BenchmarkFixture,
@@ -65,9 +63,8 @@ def test_sync_workload(
     [
         lambda: AsyncGreedyResourceSemaphore(resources=RESOURCES),
         lambda: AsyncResourceSemaphore(resources=RESOURCES),
-        lambda: AsyncNumpyResourceSemaphore(resources=RESOURCES),
     ],
-    ids=["Greedy", "Fair", "Numpy"],
+    ids=["Greedy", "Fair"],
 )
 def test_async_overhead(
     benchmark: BenchmarkFixture,
