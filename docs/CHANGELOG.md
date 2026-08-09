@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.0] - 2026-08-09
 
 ### Changed
-- **Infinite Bypass Fairness**: Eliminated the hardcoded `lookahead_window` parameter. Semaphores now evaluate the entire queue perfectly, automatically allowing smaller requests to safely bypass blocked heavy requests. This eliminates head-of-line blocking deadlocks without requiring manual configuration.
+- **Queue Fairness**: Eliminated the hardcoded `lookahead_window` parameter. Semaphores now evaluate the entire queue on each check, rather than a fixed lookahead window. This allows smaller requests to bypass blocked heavy requests when capacity permits, without requiring manual window configuration.
 - **Hot-path Optimization**: Refactored `acquire()` loops across all classes with an $O(1)$ fast-path, stripping away redundant waiter allocation and bookkeeping overhead for uncontended acquisitions.
 
 > We've evaluated a Numpy-backed variation on commit `34c13bab13b6c966caaea441a4f3e1fd48efcb73`, but it was purged due to poor performance.

@@ -9,19 +9,19 @@ When asked to implement rate-limiting, resource constraints, or backpressure usi
 
 ## Core Concepts & Classes
 - **Sync vs Async**: Use `ResourceSemaphore` for threaded/synchronous code, and `AsyncResourceSemaphore` for `asyncio` code.
-- **Initialization**: You must initialize the semaphore with a dictionary of resources. Capacities must be positive numbers. Empty dictionaries raise a `ValueError`.
+- **Initialization**: You must initialize the semaphore with a dictionary of resource names and integer capacities (`int`). Capacities must be positive numbers. Empty dictionaries raise a `ValueError`.
   ```python
   from resource_semaphore import AsyncResourceSemaphore
 
   semaphore = AsyncResourceSemaphore(resources={"db_conn": 2, "ram_mb": 4096})
   ```
-- **Fairness & Infinite Bypass**: The standard semaphore uses an intelligent FIFO queue by default. While it prioritizes older requests to prevent starvation, it natively evaluates the entire queue and automatically allows smaller tasks to safely bypass blocked heavy tasks if leftover capacity permits. This totally eliminates head-of-line blocking deadlocks.
+- **Fairness & Trade-offs**: The standard semaphore uses priority queueing by default. It prioritizes the earliest-arrived request whose demand currently fits, while allowing smaller later requests to bypass an earlier larger one that doesn't fit yet.
   ```python
-  # Even if a task is blocked waiting for 10 CPU cores,
-  # a smaller task needing only 1 CPU core can immediately bypass it if available.
+  # If a heavy task is waiting for 10 CPU cores, a smaller task needing 1 CPU core
+  # can proceed ahead if 1 CPU core is currently available.
   semaphore = AsyncResourceSemaphore({"cpu": 10})
   ```
-- **Greedy Variants**: If strict fairness is not required and starvation is unlikely, use the hyper-optimized `GreedyResourceSemaphore` or `AsyncGreedyResourceSemaphore`. These variants skip queue tracking entirely and allow tasks to aggressively acquire resources the instant they become available, regardless of queue position.
+- **Greedy Variants**: `GreedyResourceSemaphore` or `AsyncGreedyResourceSemaphore` skip arrival ordering checks entirely. Any caller whose demand fits acquires resources, which carries a stronger starvation risk under continuous contention.
   ```python
   from resource_semaphore import AsyncGreedyResourceSemaphore
 

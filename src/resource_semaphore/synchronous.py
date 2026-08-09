@@ -192,9 +192,9 @@ class ResourceSemaphore(_SyncBaseSemaphore[K]):
 
 class GreedyResourceSemaphore(_SyncBaseSemaphore[K]):
     """
-    Resource semaphore that does not enforce any fairness or FIFO ordering.
-    Requests will acquire resources as soon as they are available, potentially
-    bypassing earlier blocked requests.
+    Resource semaphore that does not enforce any arrival-order priority.
+    Requests acquire resources as soon as capacity permits, which may starve
+    a queued waiter under continuous contention.
     """
 
     def acquire(self, demands: Mapping[K, int], timeout: float | None = None) -> Ticket:

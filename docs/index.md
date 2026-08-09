@@ -20,25 +20,15 @@ A standard semaphore guards a single counter — for example, "at most 5 concurr
 
 For example, your application might be constrained by both "CPU cores" and "available RAM." This library lets you model limits on these resources and apply backpressure to consumers requesting them. When a consumer calls `acquire()` or enters a `claim()` block, it will block until **all** requested resources are simultaneously available.
 
-> **Note:** By default, `acquire()` and `claim()` block until the requested resources become available, maintaining a strict FIFO queue to guarantee fairness. You can optionally provide a `timeout` (in seconds) to fail fast with a `TimeoutError`.
+> **Note:** By default, `acquire()` and `claim()` block until the requested resources become available. Requests are served in priority order — the earliest-arrived request that *can currently be satisfied* goes first — but a smaller, later request may be granted ahead of an earlier, larger one that doesn't fit yet. This is not strict FIFO; see [Fairness and Trade-offs](#fairness-and-trade-offs) below. You can optionally provide a `timeout` (in seconds) to fail fast with a `TimeoutError`.
 
-## Fairness, Infinite Bypass, and Greedy Semaphores
+## Fairness and Trade-offs
 
-By default, `ResourceSemaphore` and `AsyncResourceSemaphore` use an intelligent **Infinite Bypass** fairness model. While they prioritize older requests to prevent starvation, they automatically evaluate the *entire* queue and allow any smaller tasks to safely bypass blocked heavy tasks if leftover capacity permits. This massive improvement over strict head-of-line blocking prevents pipelines from deadlocking without requiring any manual window configuration.
+`ResourceSemaphore` and `AsyncResourceSemaphore` use a priority model: the earliest-arrived waiter whose demand currently fits is granted first, but a later, smaller request may bypass an earlier, larger one that can't yet be satisfied. This avoids one common failure mode (a large blocked request stalling every smaller request behind it) at the cost of a different one: a sufficiently large request can wait longer than it would under strict FIFO if smaller requests keep arriving. There's no upper bound on that wait under sustained load — if your workload has occasional large demands mixed with a constant stream of small ones, expect the large ones to be delayed accordingly.
 
-```python
-from resource_semaphore import AsyncResourceSemaphore
+`GreedyResourceSemaphore`/`AsyncGreedyResourceSemaphore` skip ordering entirely: any caller whose demand fits wins, including a caller that arrived after another one is already waiting. This is a materially different (and stronger) starvation risk than the Fair variant's: a queued waiter can be starved indefinitely by a continuous stream of new callers, not just delayed. Use Greedy only when every request is roughly the same size and you don't need any specific request to be guaranteed forward progress.
 
-# Even if a massive task is blocked waiting for 10 CPU cores,
-# a smaller task needing only 1 CPU core can immediately bypass it if available.
-semaphore = AsyncResourceSemaphore({"cpu": 10})
-```
-
-For workloads where starvation is unlikely, you can use the hyper-optimized Greedy variants:
-- `GreedyResourceSemaphore`
-- `AsyncGreedyResourceSemaphore`
-
-These skip queue bookkeeping entirely, allowing tasks to aggressively acquire resources the instant they become available, regardless of queue position.
+Fair and Greedy variants show no measurable throughput difference in our benchmarks (see `.benchmarks/`); Greedy trades ordering guarantees for a simpler code path, not raw speed.
 
 ## Sync vs Async
 
@@ -50,7 +40,7 @@ Both share identical APIs (modulo `async`/`await`).
 
 ## Initialization
 
-You initialize a semaphore by providing a dictionary of resource names to their capacities. All capacities must be positive numbers (integers or floats).
+You initialize a semaphore by providing a dictionary of resource names to their capacities. All capacities must be positive integers (`int`).
 
 ```python
 from resource_semaphore import AsyncResourceSemaphore
@@ -218,3 +208,11 @@ semaphore = ResourceSemaphore(
 ```
 
 Async variants (`aget_cpu`, `aget_memory`, `aget_storage`) are also available if you are discovering resources during application startup in an async context.
+
+## Limitations
+
+- **Single-Process Scope:** `resource-semaphore` operates purely within a single Python process (threads or `asyncio`). It does not provide inter-process communication (IPC) or distributed multi-node resource locking.
+- **Resource Discovery Boundaries:** The `utils` extra provides hardware capacity helpers strictly for CPU count, system RAM, and disk storage via `psutil`. It does not discover GPU availability, network bandwidth, or peripheral hardware. Users may manually define any custom resource key with integer units.
+- **Application Deadlocks:** The library tracks resource capacities, not task dependency chains. If application code acquires multiple semaphores out-of-order across threads/tasks, deadlocks may still occur at the application level.
+- **API Stability:** Pre-1.0 / active development status means minor version updates may occasionally include breaking API changes.
+

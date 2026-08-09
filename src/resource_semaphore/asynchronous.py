@@ -195,9 +195,9 @@ class AsyncResourceSemaphore(_AsyncBaseSemaphore[K]):
 
 class AsyncGreedyResourceSemaphore(_AsyncBaseSemaphore[K]):
     """
-    Async resource semaphore that does not enforce any fairness or FIFO ordering.
-    Requests will acquire resources as soon as they are available, potentially
-    bypassing earlier blocked requests.
+    Async resource semaphore that does not enforce any arrival-order priority.
+    Requests acquire resources as soon as capacity permits, which may starve
+    a queued waiter under continuous contention.
     """
 
     async def acquire(

@@ -23,7 +23,7 @@ from resource_semaphore import AsyncResourceSemaphore
 semaphore = AsyncResourceSemaphore(resources={"db_conn": 2, "ram_mb": 4096})
 
 
-async def process(data_size_mb: float):
+async def process(data_size_mb: int):
     async with semaphore.claim({"db_conn": 1, "ram_mb": data_size_mb}):
         await do_work()
 
@@ -39,18 +39,24 @@ async def main():
 
 ## Features
 
-- **Multi-resource**: manage DB connection, RAM, workers, or any named resource in a single semaphore
-- **Sync + Async**: `ResourceSemaphore` for threads, `AsyncResourceSemaphore` for asyncio
-- **Infinite Bypass Fairness**: Avoids starvation by prioritizing older requests, while automatically allowing smaller queued requests to safely bypass blocked heavy tasks, completely eliminating head-of-line blocking deadlocks.
-- **Greedy Variants**: `GreedyResourceSemaphore` and `AsyncGreedyResourceSemaphore` skip queueing entirely for maximum utilization in non-starving pipelines.
-- **High Performance**: Built on a shared template base class architecture, heavily optimizing acquisition loops by stripping unnecessary overhead from greedy implementations.
-- **Timeouts**: abort waits gracefully using `timeout` arguments
-- **Safe Releases**: opaque `Ticket` objects prevent corrupted state from incorrect releases
+- **Multi-resource**: atomically acquire multiple named resources (e.g. DB connections, RAM, workers) in one call
+- **Sync + Async**: `ResourceSemaphore` (threading) and `AsyncResourceSemaphore` (asyncio) share the same API
+- **Fair and Greedy variants**: Fair semaphores wake the earliest-arrived request that can currently be satisfied, and let smaller later requests bypass a blocked larger one — see [Docs: Fairness and Trade-offs](docs/index.md#fairness-and-trade-offs) for the starvation trade-off this implies. Greedy semaphores skip ordering entirely and grant to whichever caller wins the race; this can starve a specific waiter indefinitely under sustained contention (see [Docs: Fairness and Trade-offs](docs/index.md#fairness-and-trade-offs)).
+- **Timeouts**: `acquire()`/`claim()` accept an optional `timeout` argument and raise `TimeoutError`
+- **Safe releases**: opaque `Ticket` objects; releasing an unknown or already-released ticket raises `ValueError`
 - **Typed**: generic over resource key types via `Literal` for compile-time safety
-- **No-op variants**: `NoopResourceSemaphore` and `AsyncNoopResourceSemaphore` for tests
-- **Graceful shutdown**: `shutdown()` wakes all blocked callers with a `SemaphoreError`
-- **Zero dependencies** (Core): pure Python, nothing to install beyond the standard library
-- **System Utilities**: dynamic initialization via `resource-semaphore[utils]` for fetching CPU/RAM limits
+- **No-op variants**: `NoopResourceSemaphore` and `AsyncNoopResourceSemaphore` for tests that don't need real limits
+- **Graceful shutdown**: `shutdown()` wakes all blocked callers with `SemaphoreError`; further `acquire()` calls raise immediately
+- **Zero dependencies** in core
+- **Optional system utilities**: `resource-semaphore[utils]` wraps `psutil` for CPU/RAM/disk capacity discovery (CPU and RAM only — no GPU support)
+- **Performance**: Fair and Greedy variants show no measurable throughput difference in our benchmarks (see `.benchmarks/`); Greedy trades ordering guarantees for a simpler code path, not raw speed.
+
+## Limitations
+
+- **Single-process only**: Manages concurrency within a single Python process (threads or `asyncio` tasks). It is not a distributed or cross-process semaphore.
+- **Resource discovery limits**: Built-in utilities (`resource-semaphore[utils]`) only discover basic CPU, memory, and disk metrics via `psutil`. There is no automatic discovery for GPUs, network interfaces, or custom external hardware (though any named resource can be managed by manually specifying integer capacities).
+- **No deadlock prevention**: Does not detect or prevent application-level deadlocks resulting from improper lock acquisition ordering across multiple semaphores or code paths.
+- **Evolving API**: The API is subject to refinement; minor version updates may introduce breaking changes as feature needs evolve.
 
 
 
