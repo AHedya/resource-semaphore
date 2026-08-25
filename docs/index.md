@@ -181,7 +181,7 @@ print(semaphore.is_shutdown)
 # False
 ```
 
-> **Note:** `available` is not read under lock — it's intended for diagnostics and logging, not for making synchronization decisions.
+> **Note:** `available` returns a snapshot copy for diagnostics and logging, rather than for making synchronization decisions.
 
 ## System Utilities
 

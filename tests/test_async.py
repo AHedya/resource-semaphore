@@ -7,6 +7,7 @@ from resource_semaphore.asynchronous import (
     AsyncGreedyResourceSemaphore,
     AsyncNoopResourceSemaphore,
     AsyncResourceSemaphore,
+    _AsyncWaiter,
 )
 from resource_semaphore.base import SemaphoreError, Ticket
 
@@ -219,6 +220,28 @@ class TestBlockingAcquire:
             re.set()
 
         await asyncio.gather(*tasks)
+
+    async def test_first_eligible_priority(self):
+
+        rs = AsyncResourceSemaphore(resources={"cpu": 2})
+        t = await rs.acquire({"cpu": 2})
+
+        w1 = _AsyncWaiter(seq=0, demands={"cpu": 1}, event=asyncio.Event())
+        w2 = _AsyncWaiter(seq=1, demands={"cpu": 1}, event=asyncio.Event())
+        async with rs._lock:
+            rs._waiters.extend([w1, w2])
+            # When 0 available, neither can acquire, so both are considered first eligible relative to themselves
+            assert rs._is_first_eligible(1) is True
+            # When seq not found and no waiter can acquire, fallback returns True
+            assert rs._is_first_eligible(999) is True
+
+        await rs.release(t)
+        async with rs._lock:
+            # Now 2 available, w1 can acquire, so w2 is NOT first eligible
+            assert rs._is_first_eligible(1) is False
+            assert rs._is_first_eligible(0) is True
+            # Clean up test waiters
+            rs._waiters.clear()
 
 
 class TestShutdown:

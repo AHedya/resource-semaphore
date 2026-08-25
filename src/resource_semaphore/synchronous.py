@@ -152,17 +152,16 @@ class ResourceSemaphore(_SyncBaseSemaphore[K]):
     def acquire(self, demands: Mapping[K, int], timeout: float | None = None) -> Ticket:
         self._validate_demands(demands)
 
-        # Fast path: nobody's ahead of us
+        # Fast path or register waiter atomically
         with self._lock:
             if self._is_shutdown:
                 raise SemaphoreError("Semaphore shut down; cannot acquire.")
             if not self._waiters and self._can_acquire(demands):
                 return self._claim_locked(demands)
-
-        seq = next(self._seq_counter)
-        waiter = _SyncWaiter(seq=seq, demands=dict(demands), event=threading.Event())
-
-        with self._lock:
+            seq = next(self._seq_counter)
+            waiter = _SyncWaiter(
+                seq=seq, demands=dict(demands), event=threading.Event()
+            )
             self._waiters.append(waiter)
 
         try:
@@ -204,9 +203,7 @@ class GreedyResourceSemaphore(_SyncBaseSemaphore[K]):
                 raise SemaphoreError("Semaphore shut down; cannot acquire.")
             if self._can_acquire(demands):
                 return self._claim_locked(demands)
-
-        waiter = _SyncWaiter(seq=0, demands=dict(demands), event=threading.Event())
-        with self._lock:
+            waiter = _SyncWaiter(seq=0, demands=dict(demands), event=threading.Event())
             self._waiters.append(waiter)
         try:
             deadline = None if timeout is None else time.monotonic() + timeout

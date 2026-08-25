@@ -9,6 +9,7 @@ from resource_semaphore.synchronous import (
     GreedyResourceSemaphore,
     NoopResourceSemaphore,
     ResourceSemaphore,
+    _SyncWaiter,
 )
 
 
@@ -230,6 +231,28 @@ class TestBlockingAcquire:
             re.set()
         for t in threads:
             t.join(timeout=2)
+
+    def test_first_eligible_priority(self):
+
+        rs = ResourceSemaphore(resources={"cpu": 2})
+        t = rs.acquire({"cpu": 2})
+
+        w1 = _SyncWaiter(seq=0, demands={"cpu": 1}, event=threading.Event())
+        w2 = _SyncWaiter(seq=1, demands={"cpu": 1}, event=threading.Event())
+        with rs._lock:
+            rs._waiters.extend([w1, w2])
+            # When 0 available, neither can acquire, so both are considered first eligible relative to themselves
+            assert rs._is_first_eligible(1) is True
+            # When seq not found and no waiter can acquire, fallback returns True
+            assert rs._is_first_eligible(999) is True
+
+        rs.release(t)
+        with rs._lock:
+            # Now 2 available, w1 can acquire, so w2 is NOT first eligible
+            assert rs._is_first_eligible(1) is False
+            assert rs._is_first_eligible(0) is True
+            # Clean up test waiters
+            rs._waiters.clear()
 
 
 class TestShutdown:

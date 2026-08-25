@@ -147,17 +147,14 @@ class AsyncResourceSemaphore(_AsyncBaseSemaphore[K]):
     ) -> Ticket:
         self._validate_demands(demands)
 
-        # Fast path: nobody's ahead of us
+        # Fast path or register waiter atomically
         async with self._lock:
             if self._is_shutdown:
                 raise SemaphoreError("Semaphore shut down; cannot acquire.")
             if not self._waiters and self._can_acquire(demands):
                 return self._claim_locked(demands)
-
-        seq = next(self._seq_counter)
-        waiter = _AsyncWaiter(seq=seq, demands=dict(demands), event=asyncio.Event())
-
-        async with self._lock:
+            seq = next(self._seq_counter)
+            waiter = _AsyncWaiter(seq=seq, demands=dict(demands), event=asyncio.Event())
             self._waiters.append(waiter)
 
         try:
@@ -205,16 +202,13 @@ class AsyncGreedyResourceSemaphore(_AsyncBaseSemaphore[K]):
     ) -> Ticket:
         self._validate_demands(demands)
 
-        # Fast path
+        # Fast path or register waiter atomically
         async with self._lock:
             if self._is_shutdown:
                 raise SemaphoreError("Semaphore shut down; cannot acquire.")
             if self._can_acquire(demands):
                 return self._claim_locked(demands)
-
-        waiter = _AsyncWaiter(seq=0, demands=dict(demands), event=asyncio.Event())
-
-        async with self._lock:
+            waiter = _AsyncWaiter(seq=0, demands=dict(demands), event=asyncio.Event())
             self._waiters.append(waiter)
 
         try:
