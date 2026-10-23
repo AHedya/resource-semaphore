@@ -1,11 +1,9 @@
-feat: add Python 3.15, 3.15t, 3.13t support and optimize CI/Nox workflows (v1.4.0)
+fix: atomic event clearing & test determinism (v1.4.1)
 
-- Bump version to 1.4.0 and relax Python requirement to <3.16,>=3.11
-- Add official support and matrix testing for Python 3.15, 3.15t, and 3.13t
-- Optimize GitHub Actions CI to single-runner parallel execution using uv + nox
-- Harden noxfile sessions with --locked and guard mutating sessions against parallel runs
-- Introduce on-demand prepush checklist session (lint, type check, full test matrix, coverage)
-- Configure fast, non-mutating pre-commit hook (lint + type check)
-- Strengthen publish workflow with tomllib tag validation and uv lock --check
-- Set package version fallback to sentinel "0.0.0+dev0" when uninstalled
-- Add PyPI classifiers for Free Threading, OS Independent, and CPython implementation
+- Fix lost-wakeup race condition on free-threaded Python builds (3.13t-3.15t) by clearing waiter events atomically under lock
+- Fix small-request bypass test race condition by isolating partial capacity releases
+- Overhaul test suite with deterministic queue polling handshakes, eliminating flaky sleep and timer patterns
+- Re-export Ticket, SemaphoreError, BaseResourceSemaphore, and BaseAsyncResourceSemaphore at package root
+- Harden get_storage() for Windows drive roots and get_cpu() with cascading container fallbacks
+- Add explicit OS classifiers for Linux, Windows, and macOS to pyproject.toml
+- Update documentation error table, shutdown release semantics, and sync CHANGELOG.md for 1.4.0 and 1.4.1

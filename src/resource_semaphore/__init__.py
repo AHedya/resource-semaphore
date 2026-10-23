@@ -10,6 +10,12 @@ from .asynchronous import (
     AsyncNoopResourceSemaphore,
     AsyncResourceSemaphore,
 )
+from .base import (
+    BaseAsyncResourceSemaphore,
+    BaseResourceSemaphore,
+    SemaphoreError,
+    Ticket,
+)
 from .synchronous import (
     GreedyResourceSemaphore,
     NoopResourceSemaphore,
@@ -23,5 +29,9 @@ __all__ = [
     "AsyncNoopResourceSemaphore",
     "AsyncResourceSemaphore",
     "AsyncGreedyResourceSemaphore",
+    "BaseResourceSemaphore",
+    "BaseAsyncResourceSemaphore",
+    "SemaphoreError",
+    "Ticket",
     "__version__",
 ]

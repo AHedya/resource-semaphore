@@ -10,7 +10,7 @@ from .base import BaseResourceSemaphore, SemaphoreError, Ticket
 K = TypeVar("K", bound=str)
 
 
-@dataclass
+@dataclass(slots=True, frozen=True)
 class _SyncWaiter(Generic[K]):
     seq: int
     demands: dict[K, int]
@@ -174,6 +174,8 @@ class ResourceSemaphore(_SyncBaseSemaphore[K]):
                     if self._can_acquire(demands) and self._is_first_eligible(seq):
                         return self._claim_locked(demands)
 
+                    waiter.event.clear()
+
                 remaining = None
                 if deadline is not None:
                     remaining = deadline - time.monotonic()
@@ -182,7 +184,6 @@ class ResourceSemaphore(_SyncBaseSemaphore[K]):
                             f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
                         )
                 waiter.event.wait(timeout=remaining)
-                waiter.event.clear()
         finally:
             with self._lock:
                 self._waiters.remove(waiter)
@@ -213,6 +214,7 @@ class GreedyResourceSemaphore(_SyncBaseSemaphore[K]):
                         raise SemaphoreError("Semaphore shut down; cannot acquire.")
                     if self._can_acquire(demands):
                         return self._claim_locked(demands)
+                    waiter.event.clear()
                 remaining = None
                 if deadline is not None:
                     remaining = deadline - time.monotonic()
@@ -221,7 +223,6 @@ class GreedyResourceSemaphore(_SyncBaseSemaphore[K]):
                             f"Timed out after {timeout}s waiting to acquire {dict(demands)}."
                         )
                 waiter.event.wait(timeout=remaining)
-                waiter.event.clear()
         finally:
             with self._lock:
                 self._waiters.remove(waiter)

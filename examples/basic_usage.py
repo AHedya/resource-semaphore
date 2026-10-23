@@ -1,9 +1,14 @@
+"""Basic Usage Example
+
+Demonstrates atomic multi-resource acquisition and backpressure using both
+synchronous (threading) and asynchronous (asyncio) resource semaphores.
+"""
+
 import asyncio
 import threading
 import time
 
-from resource_semaphore.asynchronous import AsyncResourceSemaphore
-from resource_semaphore.synchronous import ResourceSemaphore
+from resource_semaphore import AsyncResourceSemaphore, ResourceSemaphore
 
 
 def sync_worker(semaphore: ResourceSemaphore, worker_id: int):

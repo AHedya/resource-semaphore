@@ -18,6 +18,16 @@ def semaphore_cls(request):
     return request.param
 
 
+def _wait_for_waiters(rs, count: int, timeout: float = 5.0) -> None:
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        with rs._lock:
+            if len(rs._waiters) >= count:
+                return
+        time.sleep(0.001)
+    raise TimeoutError(f"Waiters count did not reach {count} within {timeout}s")
+
+
 class TestResourceManagerInit:
     def test_basic_creation(self, semaphore_cls):
         rs = semaphore_cls(resources={"cpu": 1, "RAM_MB": 2048})
@@ -119,12 +129,10 @@ class TestClaimContextManager:
         rs = semaphore_cls(resources={"cpu": 1})
         ticket = rs.acquire({"cpu": 1})
 
-        waiting_event = threading.Event()
         acquired = threading.Event()
         done = threading.Event()
 
         def blocked_claim():
-            waiting_event.set()
             with rs.claim({"cpu": 1}):
                 acquired.set()
                 done.wait(timeout=5)
@@ -132,12 +140,11 @@ class TestClaimContextManager:
         t = threading.Thread(target=blocked_claim, daemon=True)
         t.start()
 
-        assert waiting_event.wait(timeout=2)
-        time.sleep(0.05)
+        _wait_for_waiters(rs, 1)
         assert not acquired.is_set()
 
         rs.release(ticket)
-        assert acquired.wait(timeout=2)
+        assert acquired.wait(timeout=5)
         done.set()
         t.join(timeout=2)
 
@@ -147,12 +154,10 @@ class TestBlockingAcquire:
         rs = semaphore_cls(resources={"cpu": 1})
         ticket = rs.acquire({"cpu": 1})
 
-        waiting_event = threading.Event()
         acquired = threading.Event()
         done = threading.Event()
 
         def blocked_acquire():
-            waiting_event.set()
             _ticket = rs.acquire({"cpu": 1})
             acquired.set()
             done.wait(timeout=5)
@@ -160,13 +165,11 @@ class TestBlockingAcquire:
         t = threading.Thread(target=blocked_acquire, daemon=True)
         t.start()
 
-        assert waiting_event.wait(timeout=2)
-        # Give a tiny bit of time to enter ticket = rs.acquire()'s while loop
-        time.sleep(0.05)
+        _wait_for_waiters(rs, 1)
         assert not acquired.is_set()
 
         rs.release(ticket)
-        assert acquired.wait(timeout=2)
+        assert acquired.wait(timeout=5)
         done.set()
         t.join(timeout=2)
 
@@ -174,12 +177,10 @@ class TestBlockingAcquire:
         rs = semaphore_cls(resources={"cpu": 1, "RAM_MB": 1000})
         ticket = rs.acquire({"cpu": 1})
 
-        waiting_event = threading.Event()
         acquired = threading.Event()
         release_event = threading.Event()
 
         def blocked_acquire():
-            waiting_event.set()
             _ticket = rs.acquire({"cpu": 1, "RAM_MB": 500})
             acquired.set()
             release_event.wait(timeout=5)
@@ -187,12 +188,11 @@ class TestBlockingAcquire:
         t = threading.Thread(target=blocked_acquire, daemon=True)
         t.start()
 
-        assert waiting_event.wait(timeout=2)
-        time.sleep(0.05)
+        _wait_for_waiters(rs, 1)
         assert not acquired.is_set()
 
         rs.release(ticket)
-        assert acquired.wait(timeout=2)
+        assert acquired.wait(timeout=5)
         assert rs.available == {"cpu": 0, "RAM_MB": 500}
         release_event.set()
         t.join(timeout=2)
@@ -201,12 +201,10 @@ class TestBlockingAcquire:
         rs = semaphore_cls(resources={"cpu": 2})
         ticket = rs.acquire({"cpu": 2})
 
-        waiting_events = [threading.Event() for _ in range(2)]
         events = [threading.Event() for _ in range(2)]
         release_events = [threading.Event() for _ in range(2)]
 
         def waiter(idx):
-            waiting_events[idx].set()
             _ticket = rs.acquire({"cpu": 1})
             events[idx].set()
             release_events[idx].wait(timeout=5)
@@ -217,15 +215,13 @@ class TestBlockingAcquire:
         for t in threads:
             t.start()
 
-        for we in waiting_events:
-            assert we.wait(timeout=2)
-        time.sleep(0.05)
+        _wait_for_waiters(rs, 2)
         assert not any(e.is_set() for e in events)
 
         rs.release(ticket)
 
         for e in events:
-            assert e.wait(timeout=2)
+            assert e.wait(timeout=5)
 
         for re in release_events:
             re.set()
@@ -254,17 +250,85 @@ class TestBlockingAcquire:
             # Clean up test waiters
             rs._waiters.clear()
 
+    def test_fair_fifo_order_among_eligible_waiters(self):
+        rs = ResourceSemaphore(resources={"cpu": 1})
+        t = rs.acquire({"cpu": 1})
+
+        order = []
+        done = threading.Event()
+
+        def worker(worker_id):
+            with rs.claim({"cpu": 1}):
+                order.append(worker_id)
+                done.wait(timeout=5)
+
+        t1 = threading.Thread(target=worker, args=(1,), daemon=True)
+        t1.start()
+        _wait_for_waiters(rs, 1)
+
+        t2 = threading.Thread(target=worker, args=(2,), daemon=True)
+        t2.start()
+        _wait_for_waiters(rs, 2)
+
+        rs.release(t)
+        deadline = time.monotonic() + 5.0
+        while time.monotonic() < deadline and not order:
+            time.sleep(0.001)
+
+        assert order == [1]
+        done.set()
+        t1.join(timeout=2)
+        t2.join(timeout=2)
+        assert order == [1, 2]
+
+    def test_small_request_bypasses_blocked_large_waiter(self):
+        rs = ResourceSemaphore(resources={"cpu": 2})
+        t1 = rs.acquire({"cpu": 1})
+        t2 = rs.acquire({"cpu": 1})
+
+        bypasser_acquired = threading.Event()
+        bypasser_done = threading.Event()
+
+        def large_worker():
+            with rs.claim({"cpu": 2}):
+                pass
+
+        def small_worker():
+            with rs.claim({"cpu": 1}):
+                bypasser_acquired.set()
+                bypasser_done.wait(timeout=5)
+
+        # Large worker arrives first when 0 CPUs free
+        t_large = threading.Thread(target=large_worker, daemon=True)
+        t_large.start()
+        _wait_for_waiters(rs, 1)
+
+        # Release only 1 CPU (large worker cannot fit yet)
+        rs.release(t1)
+
+        # Small worker arrives later and should bypass large worker
+        t_small = threading.Thread(target=small_worker, daemon=True)
+        t_small.start()
+
+        assert bypasser_acquired.wait(timeout=5)
+        with rs._lock:
+            assert len(rs._waiters) == 1
+        bypasser_done.set()
+        t_small.join(timeout=2)
+
+        # Release remaining CPU so large worker can finally run
+        rs.release(t2)
+        t_large.join(timeout=2)
+
 
 class TestShutdown:
     def test_shutdown_wakes_blocked_acquire(self, semaphore_cls):
         rs = semaphore_cls(resources={"cpu": 1})
         _ticket = rs.acquire({"cpu": 1})
 
-        waiting_event = threading.Event()
         errors = []
 
         def blocked_acquire():
-            waiting_event.set()
             try:
                 _ticket = rs.acquire({"cpu": 1})
             except SemaphoreError as e:
@@ -273,10 +337,9 @@ class TestShutdown:
         t = threading.Thread(target=blocked_acquire, daemon=True)
         t.start()
 
-        assert waiting_event.wait(timeout=2)
-        time.sleep(0.05)
+        _wait_for_waiters(rs, 1)
         rs.shutdown()
-        t.join(timeout=2)
+        t.join(timeout=5)
 
         assert len(errors) == 1
         assert "shut down" in str(errors[0])
@@ -286,6 +349,14 @@ class TestShutdown:
         rs.shutdown()
         with pytest.raises(SemaphoreError, match="shut down"):
             rs.acquire({"cpu": 1})
+
+    def test_release_after_shutdown_succeeds(self, semaphore_cls):
+        rs = semaphore_cls(resources={"cpu": 2})
+        ticket = rs.acquire({"cpu": 2})
+        rs.shutdown()
+        # In-flight tickets can still be cleanly released after shutdown
+        rs.release(ticket)
+        assert rs.available == {"cpu": 2}
 
     def test_shutdown_idempotent(self, semaphore_cls):
         rs = semaphore_cls(resources={"cpu": 1})
@@ -317,28 +388,31 @@ class TestTimeout:
         rs = semaphore_cls({"cpu": 1})
         ticket1 = rs.acquire({"cpu": 1})
 
-        # Release the ticket after 0.1 seconds in a background thread
-        threading.Timer(0.1, rs.release, args=(ticket1,)).start()
+        def delayed_release():
+            _wait_for_waiters(rs, 1)
+            rs.release(ticket1)
 
-        # Should succeed because it waits up to 1.0 seconds
-        ticket2 = rs.acquire({"cpu": 1}, timeout=1.0)
+        t = threading.Thread(target=delayed_release, daemon=True)
+        t.start()
+
+        ticket2 = rs.acquire({"cpu": 1}, timeout=5.0)
         assert rs.available == {"cpu": 0}
         rs.release(ticket2)
+        t.join(timeout=2.0)
 
     def test_acquire_timeout_raises(self, semaphore_cls):
         rs = semaphore_cls({"cpu": 1})
         rs.acquire({"cpu": 1})
 
-        # Should time out because resources are never released
         with pytest.raises(TimeoutError, match="Timed out"):
-            rs.acquire({"cpu": 1}, timeout=0.1)
+            rs.acquire({"cpu": 1}, timeout=0.01)
 
     def test_claim_timeout_raises(self, semaphore_cls):
         rs = semaphore_cls({"cpu": 1})
         rs.acquire({"cpu": 1})
 
         with pytest.raises(TimeoutError, match="Timed out"):
-            with rs.claim({"cpu": 1}, timeout=0.1):
+            with rs.claim({"cpu": 1}, timeout=0.01):
                 pass
 
 

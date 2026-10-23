@@ -107,8 +107,9 @@ def coverage(session: nox.Session):
     )
     assert output is not None
     match = re.search(r"TOTAL.*?(\d+)%", output)
-    if not match:
+    if match is None:
         session.error("Could not parse coverage percentage from output")
+        return
 
     pct = int(match.group(1))
 

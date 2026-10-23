@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.3.1] - 2026-08-25
+## [1.4.1] - 2026-10-23
+
+### Fixed
+- **Free-Threaded Lost Wakeup Race**: Moved `waiter.event.clear()` inside the semaphore lock critical section in `ResourceSemaphore` and `AsyncResourceSemaphore` to prevent lost wakeups under free-threaded CPython (GIL-disabled) and high thread contention.
+- **Bypass Fairness Test Determinism**: Fixed race in `test_small_request_bypasses_blocked_large_waiter` across sync and async test suites by isolating partial capacity releases, and replaced brittle wall-clock sleeps with deterministic lock-queue polling handshakes.
+- **Type Checking**: Narrowed regex match in Nox coverage calculation to satisfy static type checkers (`pyrefly`).
+
+### Added
+- **Top-Level Package Exports**: Exported `Ticket`, `SemaphoreError`, `BaseResourceSemaphore`, and `BaseAsyncResourceSemaphore` directly from the `resource_semaphore` package root.
+- **OS Classifiers**: Added explicit Trove classifiers for `POSIX :: Linux`, `Microsoft :: Windows`, and `MacOS`.
+
+## [1.4.0] - 2026-10-23
+
+### Added
+- **Python 3.15, 3.15t & 3.13t Support**: Officially added support and CI validation for Python 3.15, free-threaded Python 3.15t, and free-threaded Python 3.13t.
+- **Cross-Platform Utilities**: Hardened `get_storage()` to resolve the drive root anchor on Windows, and hardened `get_cpu()` to guarantee returning a positive `int` via cascading fallbacks for containerized environments.
+- **On-Demand Pre-Push Checklist**: Added `nox -s prepush` to run local linting, type-checking, all test suites in parallel, and coverage badge verification.
+
+### Changed
+- **CI Optimization**: Streamlined GitHub Actions tests into a single-runner parallel execution job with `uv` and `nox -j`, significantly reducing workflow execution time.
+- **Pre-commit Refinement**: Restricted git `pre-commit` hook to fast static analysis (linting and type-checking in ~1s), removing mutating coverage tasks from commits.
+- **Python Version Constraint**: Relaxed `requires-python` from `<3.15,>=3.11` to `<3.16,>=3.11`.
 
 ### Fixed
 - **Sequence Ordering Race**: Atomically allocate sequence counters and register waiters under lock in `ResourceSemaphore` and `AsyncResourceSemaphore` to prevent out-of-order sequence insertion under thread contention.

@@ -169,6 +169,8 @@ class AsyncResourceSemaphore(_AsyncBaseSemaphore[K]):
                     if self._can_acquire(demands) and self._is_first_eligible(seq):
                         return self._claim_locked(demands)
 
+                    waiter.event.clear()
+
                 remaining = None
                 if deadline is not None:
                     remaining = deadline - asyncio.get_running_loop().time()
@@ -183,7 +185,6 @@ class AsyncResourceSemaphore(_AsyncBaseSemaphore[K]):
                         await asyncio.wait_for(waiter.event.wait(), timeout=remaining)
                 except TimeoutError:
                     pass
-                waiter.event.clear()
         finally:
             async with self._lock:
                 self._waiters.remove(waiter)
@@ -223,6 +224,8 @@ class AsyncGreedyResourceSemaphore(_AsyncBaseSemaphore[K]):
                     if self._can_acquire(demands):
                         return self._claim_locked(demands)
 
+                    waiter.event.clear()
+
                 remaining = None
                 if deadline is not None:
                     remaining = deadline - asyncio.get_running_loop().time()
@@ -237,7 +240,6 @@ class AsyncGreedyResourceSemaphore(_AsyncBaseSemaphore[K]):
                         await asyncio.wait_for(waiter.event.wait(), timeout=remaining)
                 except TimeoutError:
                     pass
-                waiter.event.clear()
         finally:
             async with self._lock:
                 self._waiters.remove(waiter)

@@ -31,6 +31,29 @@ def test_get_cpu():
         assert get_cpu() == 4
         mock_cpu.assert_called_with(logical=False)
 
+    with patch("psutil.cpu_count") as mock_cpu:
+        mock_cpu.return_value = 8
+        assert get_cpu(logical=True) == 8
+        mock_cpu.assert_called_with(logical=True)
+
+    # Test fallback to logical when physical returns None
+    with patch("psutil.cpu_count", side_effect=[None, 2]):
+        assert get_cpu(logical=False) == 2
+
+    # Test fallback to os.cpu_count when psutil returns None
+    with (
+        patch("psutil.cpu_count", return_value=None),
+        patch("os.cpu_count", return_value=3),
+    ):
+        assert get_cpu(logical=False) == 3
+
+    # Test ultimate fallback to 1
+    with (
+        patch("psutil.cpu_count", return_value=None),
+        patch("os.cpu_count", return_value=None),
+    ):
+        assert get_cpu(logical=False) == 1
+
 
 @pytest.mark.asyncio
 async def test_aget_storage():

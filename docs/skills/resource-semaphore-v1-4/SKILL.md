@@ -1,6 +1,6 @@
 ---
-name: resource-semaphore-v1-3
-description: Generates Python concurrency code using version v1.3.* of the resource-semaphore library to apply multi-resource backpressure. Use this when the user needs to manage constrained resources like CPU, RAM, or DB connections across threads or asyncio tasks.
+name: resource-semaphore-v1-4
+description: Generates Python concurrency code using version v1.4.* of the resource-semaphore library to apply multi-resource backpressure. Use this when the user needs to manage constrained resources like CPU, RAM, or DB connections across threads or asyncio tasks.
 ---
 
 # Resource Semaphore Skill
@@ -8,7 +8,7 @@ description: Generates Python concurrency code using version v1.3.* of the resou
 When asked to implement rate-limiting, resource constraints, or backpressure using `resource-semaphore`, follow these strict guidelines and patterns:
 
 ## Core Concepts & Classes
-- **Sync vs Async**: Use `ResourceSemaphore` for threaded/synchronous code, and `AsyncResourceSemaphore` for `asyncio` code.
+- **Sync vs Async**: Use `ResourceSemaphore` for threaded/synchronous code, and `AsyncResourceSemaphore` for `asyncio` code. Both classes, along with `Ticket`, `SemaphoreError`, `BaseResourceSemaphore`, and `BaseAsyncResourceSemaphore`, can be imported directly from the top-level package: `from resource_semaphore import AsyncResourceSemaphore, ResourceSemaphore, Ticket, SemaphoreError`.
 - **Initialization**: You must initialize the semaphore with a dictionary of resource names and integer capacities (`int`). Capacities must be positive numbers. Empty dictionaries raise a `ValueError`.
   ```python
   from resource_semaphore import AsyncResourceSemaphore
@@ -65,7 +65,7 @@ finally:
 
 ## 4. System Utilities Integration
 If the user wants to dynamically set capacities based on system hardware, use the `utils` extension. Ensure you import from `resource_semaphore.utils`.
-- **Sync**: `get_cpu(logical=False)`, `get_memory()`, `get_storage("/")`
+- **Sync**: `get_cpu(logical=False)`, `get_memory()`, `get_storage()`
 - **Async**: `aget_cpu()`, `aget_memory()`, `aget_storage()`
 
 ```python

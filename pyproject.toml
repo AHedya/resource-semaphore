@@ -1,6 +1,6 @@
 [project]
 name = "resource-semaphore"
-version = "1.4.0"
+version = "1.4.1"
 description = "A typed, multi-resource semaphore for managing and applying backpressure to single-process application resources."
 readme = "README.md"
 authors = [{ name = "Abdulrahman Hedya", email = "abdohedya19@gmail.com" }]
@@ -21,6 +21,9 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",

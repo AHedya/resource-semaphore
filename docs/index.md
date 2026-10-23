@@ -116,8 +116,7 @@ You can gracefully shut down a semaphore to signal that no further work should b
 3. Cause any subsequent `acquire()` calls to raise `SemaphoreError` immediately.
 
 ```python
-from resource_semaphore import AsyncResourceSemaphore
-from resource_semaphore.base import SemaphoreError
+from resource_semaphore import AsyncResourceSemaphore, SemaphoreError
 
 semaphore = AsyncResourceSemaphore(resources={"db_conn": 2})
 
@@ -131,7 +130,7 @@ except SemaphoreError:
     print("Semaphore has been shut down")
 ```
 
-`shutdown()` is idempotent — calling it multiple times is safe.
+`shutdown()` is idempotent — calling it multiple times is safe. In-flight tickets acquired prior to shutdown remain valid: calling `release(ticket)` or exiting an active `claim()` block after shutdown succeeds normally and restores capacity.
 
 ## No-op Variants
 
@@ -156,15 +155,19 @@ semaphore = NoopResourceSemaphore()
 
 The semaphore validates inputs eagerly:
 
-| Condition | Error |
-|-----------|-------|
-| Empty resources dict on init | `ValueError` |
-| Zero or negative capacity on init | `ValueError` |
-| Unknown resource name in acquire/release | `ValueError` |
-| Demand exceeds total capacity | `ValueError` |
-| Zero or negative demand | `ValueError` |
-| Release would exceed capacity (double-release) | `ValueError` |
-| Acquire on a shut-down semaphore | `SemaphoreError` |
+| Condition | Exception | Context |
+|-----------|-----------|---------|
+| Empty resources dict on init | `ValueError` | Initialization |
+| Zero or negative capacity | `ValueError` | Initialization |
+| Boolean or non-integer capacity | `TypeError` | Initialization |
+| Empty demands dict | `ValueError` | `acquire()` / `claim()` |
+| Unknown resource name in demand | `ValueError` | `acquire()` / `claim()` |
+| Zero or negative demand units | `ValueError` | `acquire()` / `claim()` |
+| Boolean or non-integer demand units | `TypeError` | `acquire()` / `claim()` |
+| Demand exceeds total capacity | `ValueError` | `acquire()` / `claim()` |
+| Invalid or already-released ticket | `ValueError` | `release()` |
+| Acquire on a shut-down semaphore | `SemaphoreError` | `acquire()` / `claim()` |
+| Acquisition deadline exceeded | `TimeoutError` | `acquire()` / `claim()` |
 
 ## Diagnostics
 
@@ -202,17 +205,17 @@ semaphore = ResourceSemaphore(
     resources={
         "cpu_cores": get_cpu(logical=False),
         "ram_bytes": get_memory(),
-        "disk_free_bytes": get_storage("/"),
+        "disk_free_bytes": get_storage(),
     }
 )
 ```
 
-Async variants (`aget_cpu`, `aget_memory`, `aget_storage`) are also available if you are discovering resources during application startup in an async context.
+Async variants (`aget_cpu`, `aget_memory`, `aget_storage`) are also available if you are discovering resources during application startup in an async context. `get_cpu()` guarantees returning a positive `int` with fallback even in restricted container environments, and `get_storage()` defaults to the root anchor of the current working directory across Linux, Windows, and macOS.
 
 ## Limitations
 
-- **Single-Process Scope:** `resource-semaphore` operates purely within a single Python process (threads or `asyncio`). It does not provide inter-process communication (IPC) or distributed multi-node resource locking.
+- **Single-Process Scope:** `resource-semaphore` operates purely within a single Python process (threads or `asyncio`). It does not provide inter-process communication (IPC) or distributed multi-node resource locking. Note that `AsyncResourceSemaphore` binds to a single `asyncio` event loop and is not thread-safe across distinct OS threads.
 - **Resource Discovery Boundaries:** The `utils` extra provides hardware capacity helpers strictly for CPU count, system RAM, and disk storage via `psutil`. It does not discover GPU availability, network bandwidth, or peripheral hardware. Users may manually define any custom resource key with integer units.
 - **Application Deadlocks:** The library tracks resource capacities, not task dependency chains. If application code acquires multiple semaphores out-of-order across threads/tasks, deadlocks may still occur at the application level.
-- **API Stability:** Pre-1.0 / active development status means minor version updates may occasionally include breaking API changes.
+- **API Stability:** Adheres to Semantic Versioning (SemVer); breaking API changes will only be introduced on major version increments.
 
