@@ -1,7 +1,8 @@
 # Resource Semaphore
 
 ![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)
-![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.14t-blue.svg)
+![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.15-blue.svg)
+![Python](https://img.shields.io/badge/Python-3.13t%20%7C%203.14t%20%7C%203.15t-blue.svg)
 ![Coverage](https://img.shields.io/badge/Coverage-99%25-brightgreen.svg)
 
 

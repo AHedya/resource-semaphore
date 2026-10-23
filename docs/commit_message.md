@@ -1,7 +1,11 @@
-fix: atomic sequence counter allocation and lock consolidation (v1.3.1)
+feat: add Python 3.15, 3.15t, 3.13t support and optimize CI/Nox workflows (v1.4.0)
 
-- fix: atomically allocate sequence counters and register waiters under lock in `ResourceSemaphore` and `AsyncResourceSemaphore` to prevent out-of-order sequence insertion under thread contention.
-- perf: streamline lock entry in `acquire()` by checking the fast path and registering waiters in a single synchronized critical section.
-- test: add explicit tests for `_is_first_eligible()` precedence checks and fallback branches, achieving 100% statement coverage across all core modules.
-- docs: clarify snapshot semantics of `available` property diagnostics in `docs/index.md`.
-- chore: remove temporary scratch file `tst.py`.
+- Bump version to 1.4.0 and relax Python requirement to <3.16,>=3.11
+- Add official support and matrix testing for Python 3.15, 3.15t, and 3.13t
+- Optimize GitHub Actions CI to single-runner parallel execution using uv + nox
+- Harden noxfile sessions with --locked and guard mutating sessions against parallel runs
+- Introduce on-demand prepush checklist session (lint, type check, full test matrix, coverage)
+- Configure fast, non-mutating pre-commit hook (lint + type check)
+- Strengthen publish workflow with tomllib tag validation and uv lock --check
+- Set package version fallback to sentinel "0.0.0+dev0" when uninstalled
+- Add PyPI classifiers for Free Threading, OS Independent, and CPython implementation

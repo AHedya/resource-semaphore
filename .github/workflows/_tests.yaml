@@ -3,52 +3,30 @@ name: Tests
 on:
   workflow_call:
 jobs:
-  quality:
-    timeout-minutes: 5
-    name: Quality Checks
+  ci:
+    name: Quality & Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v7
-      - run: uv tool install nox
+      - name: Set up uv and DEV_PYTHON (3.11)
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+          python-version: "3.11"
+
       - name: Run quality checks
+        timeout-minutes: 2
+        run: uv run --locked --only-group dev nox -t quality -j auto
+
+      - name: Install test Python interpreters
+        run: uv python install 3.11 3.12 3.13 3.14 3.15 3.13t 3.14t 3.15t
+
+      - name: Run standard tests (3.11 - 3.15)
         timeout-minutes: 3
-        run: nox -s quality
+        run: uv run --locked --only-group dev nox -t tests -j 2
 
-  tests:
-    needs: [quality]
-    timeout-minutes: 5
-    name: Tests / Python ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11", "3.12", "3.13", "3.14"]
-    steps:
-      - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-          python-version: ${{ matrix.python-version }}
-      - run: uv tool install nox
-      - name: Run tests
-        timeout-minutes: 5
-        run: nox -s "tests-${{ matrix.python-version }}"
-
-  free-threaded-tests:
-    needs: [quality]
-    timeout-minutes: 5
-    name: Tests / Python 3.14t (free-threaded)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-          python-version: "3.14t"
-      - run: uv tool install nox
-      - name: Run free-threaded tests
-        timeout-minutes: 5
-        run: nox -s free_threaded_tests
+      - name: Run free-threaded tests (3.13t - 3.15t)
+        timeout-minutes: 3
+        run: uv run --locked --only-group dev nox -t ft_tests -j 2
